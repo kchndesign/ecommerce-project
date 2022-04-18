@@ -1,0 +1,13 @@
+.CardContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    max-width: 67.5rem;
+
+    & > * {
+        flex-basis: 20rem;
+        flex-shrink: 0;
+        flex-grow: 0;
+    }
+}
