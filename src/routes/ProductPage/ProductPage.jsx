@@ -96,6 +96,7 @@ const ProductPage = (props) => {
                                             ? true
                                             : false
                                     }
+                                    key={variant}
                                 />
                             );
                         })
@@ -106,6 +107,21 @@ const ProductPage = (props) => {
                             <Skeleton width="100px" height="40px" />
                         </React.Fragment>
                     )}
+
+                    <p className={Styles.ProductPage__quantity}>
+                        {currentProductData?.quantity != null ? (
+                            currentProductData.quantity > 0 ? (
+                                <>
+                                    <strong>In Stock: </strong>
+                                    {currentProductData.quantity} left
+                                </>
+                            ) : (
+                                <strong>Out of stock</strong>
+                            )
+                        ) : (
+                            <Skeleton />
+                        )}
+                    </p>
                 </div>
             </div>
         </div>

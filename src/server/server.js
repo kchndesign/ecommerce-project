@@ -40,3 +40,16 @@ export const updateProduct = async (collection, product) => {
         console.error(error);
     }
 };
+
+export const seedProducts = async (collection, products) => {
+    try {
+        const collectionRef = firestore.collection(collection);
+        const promiseArray = products.map((product) => {
+            return collectionRef.add(product);
+        });
+        const responseArray = await Promise.all(promiseArray);
+        return responseArray;
+    } catch (error) {
+        console.error(error);
+    }
+};

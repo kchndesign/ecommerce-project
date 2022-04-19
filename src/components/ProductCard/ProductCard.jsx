@@ -43,7 +43,7 @@ const ProductCard = (props) => {
             <h3>{props?.product?.title || <Skeleton />}</h3>
             <p>
                 {props.product ? (
-                    `$${props.product.price}`
+                    `$${props.product.price.toFixed(2)}`
                 ) : (
                     <Skeleton />
                 )}
