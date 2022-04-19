@@ -4,7 +4,7 @@ import CardContainer from '../../components/CardContainer/';
 import ProductCard from '../../components/ProductCard/';
 
 const HomePage = () => {
-    const [products, setProducts] = useState(null);
+    const [products, setProducts] = useState(Array(6).fill(null));
 
     async function fetchProducts() {
         const resp = await fetch(
@@ -16,24 +16,23 @@ const HomePage = () => {
     }
 
     useEffect(() => {
+        console.log(products);
         fetchProducts();
     }, []);
 
     return (
         <div className={Styles.HomePage}>
-            <h1>This is a web store</h1>
-            <h2>This is a category</h2>
+            <h1>Buy some things</h1>
+            <h2>Category:</h2>
             <CardContainer>
-                {products
-                    ? products.map((product) => {
-                          return (
-                              <ProductCard
-                                  product={product}
-                                  key={product.id}
-                              />
-                          );
-                      })
-                    : null}
+                {products.map((product, index) => {
+                    return (
+                        <ProductCard
+                            product={product}
+                            key={product?.id ?? index}
+                        />
+                    );
+                })}
             </CardContainer>
         </div>
     );
