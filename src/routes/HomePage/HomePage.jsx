@@ -2,21 +2,17 @@ import React, { useEffect, useState } from 'react';
 import Styles from './HomePage.module.scss';
 import CardContainer from '../../components/CardContainer/';
 import ProductCard from '../../components/ProductCard/';
+import { getProducts } from '../../server/server';
 
 const HomePage = () => {
     const [products, setProducts] = useState(Array(6).fill(null));
 
     async function fetchProducts() {
-        const resp = await fetch(
-            'https://fakestoreapi.com/products/category/electronics'
-        );
-        const data = await resp.json();
-        console.log(data);
+        const data = await getProducts('film');
         setProducts(data);
     }
 
     useEffect(() => {
-        console.log(products);
         fetchProducts();
     }, []);
 

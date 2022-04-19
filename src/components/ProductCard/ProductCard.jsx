@@ -30,7 +30,7 @@ const ProductCard = (props) => {
             className={Styles.ProductCard}
         >
             <img
-                src={props.product?.image}
+                src={props.product?.images.thumb}
                 alt={props.product?.title}
                 className={Styles.ProductCard__img}
                 onLoad={imageLoaded}
@@ -40,8 +40,14 @@ const ProductCard = (props) => {
                 className={Styles.ProductCard__img}
                 style={imageStyles.skeleStyle}
             />
-            <h3>{props.product?.title || <Skeleton />}</h3>
-            <p>{props.product?.price || <Skeleton />}</p>
+            <h3>{props?.product?.title || <Skeleton />}</h3>
+            <p>
+                {props.product ? (
+                    `$${props.product.price}`
+                ) : (
+                    <Skeleton />
+                )}
+            </p>
         </Link>
     );
 };

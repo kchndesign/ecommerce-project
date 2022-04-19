@@ -1,0 +1,10 @@
+.VariantButton {
+    background-color: white;
+    border: 1px solid rgb(150, 150, 150);
+    margin: 0 1rem 2rem 0;
+    padding: 1rem;
+
+    &__active {
+        border: 2px solid black;
+    }
+}
