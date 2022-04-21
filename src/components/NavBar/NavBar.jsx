@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom';
 
 const NavBar = () => {
     return (
-        <header className={Styles.NavBar}>
+        <nav className={Styles.NavBar}>
             <Link to="/">
-                <h2>WebShop THING</h2>
+                <h2>Kevin's Fantasy Film shop</h2>
             </Link>
-        </header>
+        </nav>
     );
 };
 

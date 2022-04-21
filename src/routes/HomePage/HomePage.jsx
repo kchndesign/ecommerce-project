@@ -6,30 +6,28 @@ import { getProducts } from '../../server/server';
 import Carousel from '../../components/Carousel/';
 
 const HomePage = () => {
-    const [products, setProducts] = useState(Array(6).fill(null));
+    const [products, setProducts] = useState(
+        Array(6).fill(null),
+    );
 
-    async function fetchProducts() {
-        const data = await getProducts('film');
-        setProducts(data);
-    }
-
+    // initial fetch products
     useEffect(() => {
+        async function fetchProducts() {
+            const data = await getProducts('film');
+            setProducts(data);
+        }
+
         fetchProducts();
     }, []);
 
-    useEffect(() => {
-        console.log(products);
-    }, [products]);
-
     return (
         <div className={Styles.HomePage}>
-            <h1>Buy some things</h1>
+            <h2 className={Styles.HomePage__heading}>Film</h2>
             <Carousel
                 featuredProducts={products.filter((product) => {
                     return product?.isFeatured ? true : false;
                 })}
             />
-            {/* <h2>Category:</h2> */}
             <CardContainer>
                 {products.map((product, index) => {
                     return (
