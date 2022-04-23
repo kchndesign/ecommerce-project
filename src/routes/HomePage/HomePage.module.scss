@@ -1,6 +1,9 @@
 .HomePage {
-    &__heading {
-        font-size: 2.5rem;
-        margin: 2rem 0;
+    &__Heading {
+        font-size: clamp(2rem, 5vw, 6rem);
+    }
+
+    a {
+        display: block;
     }
 }

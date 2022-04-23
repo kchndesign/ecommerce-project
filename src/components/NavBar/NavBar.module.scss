@@ -1,0 +1,32 @@
+.NavBar {
+    width: 100%;
+    background-color: #2f2f2f;
+
+    &__container {
+        display: flex;
+        justify-content: space-between;
+        max-width: 67.5rem;
+        margin: auto;
+    }
+
+    &__icon {
+        width: 4rem;
+        margin: 1rem 0;
+        filter: invert(1);
+    }
+
+    ul {
+        display: flex;
+        li {
+            list-style-type: none;
+            margin: auto 2rem;
+            a {
+                color: white;
+                text-decoration: none;
+                font-family: 'Plus Jakarta Sans';
+                font-size: 1.5rem;
+                font-weight: 700;
+            }
+        }
+    }
+}

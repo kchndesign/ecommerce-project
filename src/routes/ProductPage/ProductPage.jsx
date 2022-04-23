@@ -8,11 +8,11 @@ import { Link } from 'react-router-dom';
 
 const ProductPage = (props) => {
     const [currentProductData, setCurrentProductData] = useState(
-        {},
+        {}
     );
     const [currentVariant, setCurrentVariant] = useState('');
 
-    const urlParam = useParams();
+    const urlParams = useParams();
 
     // css states to show skeleton instead of image
     const [imageStyles, setImageStyles] = useState({
@@ -40,7 +40,10 @@ const ProductPage = (props) => {
     // initial data fetch
     useEffect(() => {
         async function initCurrentProductData() {
-            const data = await getProduct('film', urlParam);
+            const data = await getProduct(
+                urlParams.category,
+                urlParams
+            );
             setCurrentVariant(data.variants[0]);
             setCurrentProductData(data);
         }
@@ -55,8 +58,14 @@ const ProductPage = (props) => {
     return (
         <div className={Styles.ProductPage}>
             <p className={Styles.ProductPage__breadcrumb}>
-                <Link to="/">Film</Link> &gt;{' '}
-                <Link to={`/product/${urlParam.id}`}>
+                <Link to={`/${urlParams.category}`}>
+                    {urlParams.category.charAt(0).toUpperCase() +
+                        urlParams.category.slice(1)}
+                </Link>{' '}
+                &gt;{' '}
+                <Link
+                    to={`/${urlParams.category}/${urlParams.id}`}
+                >
                     {currentProductData.title || (
                         <Skeleton inline={true} width="5rem" />
                     )}
@@ -118,7 +127,7 @@ const ProductPage = (props) => {
                                         key={variant}
                                     />
                                 );
-                            },
+                            }
                         )
                     ) : (
                         <React.Fragment>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Styles from './ProductCard.module.scss';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
 
 const ProductCard = (props) => {
@@ -29,8 +29,9 @@ const ProductCard = (props) => {
 
     return (
         <Link
-            to={`/product/${props.product?.id || '#'}`}
-            className={Styles.ProductCard}>
+            to={`${props.product?.id || '#'}`}
+            className={Styles.ProductCard}
+        >
             <img
                 src={props.product?.images.thumb}
                 alt={props.product?.title}

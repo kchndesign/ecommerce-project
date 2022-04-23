@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import Styles from './Carousel.module.scss';
 import { Link } from 'react-router-dom';
@@ -32,18 +32,35 @@ const Carousel = (props) => {
         });
     };
 
+    // when it's parent sends new props, we need to reset the image styles
+    // I use useEffect here because we only want to do this when
+    // the dependency has actually changed.
+    useEffect(() => {
+        setImageStyles({
+            imgStyle: {
+                display: 'none',
+            },
+            skeleStyle: {
+                display: 'block',
+            },
+        });
+    }, [props.featuredProducts]);
+
     return (
         <React.Fragment>
             <ResponsiveCarousel
                 style={imageStyles.imgStyle}
                 showThumbs={false}
-                showStatus={false}>
+                showStatus={false}
+            >
                 {props.featuredProducts.map((product, index) => {
                     return product?.images ? (
                         <div
+                            style={imageStyles.imgStyle}
                             key={product.id}
-                            className={Styles.CarouselItem}>
-                            <Link to={`/product/${product.id}`}>
+                            className={Styles.CarouselItem}
+                        >
+                            <Link to={`${product.id}`}>
                                 <img
                                     src={
                                         product.images?.[
@@ -64,7 +81,8 @@ const Carousel = (props) => {
                                 <div
                                     className={
                                         Styles.CarouselItem__text
-                                    }>
+                                    }
+                                >
                                     <h3>
                                         {product.title || (
                                             <Skeleton />
@@ -73,7 +91,7 @@ const Carousel = (props) => {
                                     <p>
                                         {product?.price ? (
                                             `$${product.price.toFixed(
-                                                2,
+                                                2
                                             )}`
                                         ) : (
                                             <Skeleton />

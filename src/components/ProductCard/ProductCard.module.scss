@@ -11,6 +11,9 @@
         height: 250px;
         object-fit: contain;
         object-position: center;
+
+        // add slight filter to see boxes
+        filter: brightness(0.92);
     }
 
     h3 {
