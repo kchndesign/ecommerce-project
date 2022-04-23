@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import Styles from './Carousel.module.scss';
 import { Link } from 'react-router-dom';
@@ -36,7 +36,8 @@ const Carousel = (props) => {
         <React.Fragment>
             <ResponsiveCarousel
                 style={imageStyles.imgStyle}
-                showThumbs={false}>
+                showThumbs={false}
+                showStatus={false}>
                 {props.featuredProducts.map((product, index) => {
                     return product?.images ? (
                         <div

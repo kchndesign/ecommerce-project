@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
 
 const ProductCard = (props) => {
+    // default css styles shows skeleton instead of image
     const [imageStyles, setImageStyles] = useState({
         imgStyle: {
             display: 'none',
@@ -13,6 +14,8 @@ const ProductCard = (props) => {
         },
     });
 
+    // this is called when the image loads, and swaps the styles
+    // so that the skeleton is hidden and actual content is showed
     const imageLoaded = () => {
         setImageStyles({
             imgStyle: {
@@ -27,8 +30,7 @@ const ProductCard = (props) => {
     return (
         <Link
             to={`/product/${props.product?.id || '#'}`}
-            className={Styles.ProductCard}
-        >
+            className={Styles.ProductCard}>
             <img
                 src={props.product?.images.thumb}
                 alt={props.product?.title}

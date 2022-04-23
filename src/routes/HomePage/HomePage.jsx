@@ -6,6 +6,7 @@ import { getProducts } from '../../server/server';
 import Carousel from '../../components/Carousel/';
 
 const HomePage = () => {
+    // initialise with empty products to show skeleton placeholders
     const [products, setProducts] = useState(
         Array(6).fill(null),
     );

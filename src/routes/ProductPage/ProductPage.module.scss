@@ -8,6 +8,20 @@
         }
     }
 
+    &__breadcrumb {
+        margin: 2rem 0;
+        font-size: 1.2rem;
+
+        a {
+            color: #333;
+            font-weight: bold;
+
+            &:hover {
+                color: lighten(#333, 35%);
+            }
+        }
+    }
+
     &__image {
         img,
         .ProductPage__imagePlaceholder {

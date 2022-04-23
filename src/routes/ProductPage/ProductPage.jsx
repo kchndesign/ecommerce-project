@@ -4,13 +4,17 @@ import { useParams } from 'react-router-dom';
 import Styles from './ProductPage.module.scss';
 import Skeleton from 'react-loading-skeleton';
 import { getProduct } from '../../server/server';
+import { Link } from 'react-router-dom';
 
 const ProductPage = (props) => {
-    const [currentProductData, setCurrentProductData] = useState({});
+    const [currentProductData, setCurrentProductData] = useState(
+        {},
+    );
     const [currentVariant, setCurrentVariant] = useState('');
 
     const urlParam = useParams();
 
+    // css states to show skeleton instead of image
     const [imageStyles, setImageStyles] = useState({
         imgStyle: {
             display: 'none',
@@ -20,6 +24,8 @@ const ProductPage = (props) => {
         },
     });
 
+    // this is called when the image loads, and swaps the styles
+    // so that the skeleton is hidden and actual content is showed
     const imageLoaded = () => {
         setImageStyles({
             imgStyle: {
@@ -31,22 +37,31 @@ const ProductPage = (props) => {
         });
     };
 
-    async function initCurrentProductData() {
-        const data = await getProduct('film', urlParam);
-        setCurrentVariant(data.variants[0]);
-        setCurrentProductData(data);
-    }
-
+    // initial data fetch
     useEffect(() => {
+        async function initCurrentProductData() {
+            const data = await getProduct('film', urlParam);
+            setCurrentVariant(data.variants[0]);
+            setCurrentProductData(data);
+        }
         initCurrentProductData();
     }, []);
 
+    // change variation to the variation of the button that was clicked
     const variantButtonClicked = (e) => {
         setCurrentVariant(e.target.innerText);
     };
 
     return (
         <div className={Styles.ProductPage}>
+            <p className={Styles.ProductPage__breadcrumb}>
+                <Link to="/">Film</Link> &gt;{' '}
+                <Link to={`/product/${urlParam.id}`}>
+                    {currentProductData.title || (
+                        <Skeleton inline={true} width="5rem" />
+                    )}
+                </Link>
+            </p>
             <div className={Styles.ProductPage__container}>
                 <div className={Styles.ProductPage__image}>
                     <img
@@ -67,7 +82,9 @@ const ProductPage = (props) => {
                 </div>
                 <div className={Styles.ProductPage__info}>
                     <h2 className={Styles.ProductPage__title}>
-                        {currentProductData.title || <Skeleton />}
+                        {currentProductData.title || (
+                            <Skeleton />
+                        )}
                     </h2>
                     <p className={Styles.ProductPage__price}>
                         {currentProductData?.price ? (
@@ -84,27 +101,39 @@ const ProductPage = (props) => {
                     </p>
 
                     {currentVariant ? (
-                        currentProductData.variants.map((variant) => {
-                            return (
-                                <VariantButton
-                                    variant={variant}
-                                    variantButtonClicked={
-                                        variantButtonClicked
-                                    }
-                                    isActive={
-                                        variant == currentVariant
-                                            ? true
-                                            : false
-                                    }
-                                    key={variant}
-                                />
-                            );
-                        })
+                        currentProductData.variants.map(
+                            (variant) => {
+                                return (
+                                    <VariantButton
+                                        variant={variant}
+                                        variantButtonClicked={
+                                            variantButtonClicked
+                                        }
+                                        isActive={
+                                            variant ===
+                                            currentVariant
+                                                ? true
+                                                : false
+                                        }
+                                        key={variant}
+                                    />
+                                );
+                            },
+                        )
                     ) : (
                         <React.Fragment>
-                            <Skeleton width="100px" height="40px" />
-                            <Skeleton width="100px" height="40px" />
-                            <Skeleton width="100px" height="40px" />
+                            <Skeleton
+                                width="100px"
+                                height="40px"
+                            />
+                            <Skeleton
+                                width="100px"
+                                height="40px"
+                            />
+                            <Skeleton
+                                width="100px"
+                                height="40px"
+                            />
                         </React.Fragment>
                     )}
 
@@ -113,7 +142,10 @@ const ProductPage = (props) => {
                             currentProductData.quantity > 0 ? (
                                 <>
                                     <strong>In Stock: </strong>
-                                    {currentProductData.quantity} left
+                                    {
+                                        currentProductData.quantity
+                                    }{' '}
+                                    left
                                 </>
                             ) : (
                                 <strong>Out of stock</strong>
