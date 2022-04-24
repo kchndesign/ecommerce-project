@@ -2,36 +2,16 @@ import React, { useState } from 'react';
 import Styles from './ProductCard.module.scss';
 import { Link, useParams } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
+import useImageLoaded from '../../hooks/useImageLoaded.jsx';
 
 const ProductCard = (props) => {
     // default css styles shows skeleton instead of image
-    const [imageStyles, setImageStyles] = useState({
-        imgStyle: {
-            display: 'none',
-        },
-        skeleStyle: {
-            display: 'block',
-        },
-    });
-
-    // this is called when the image loads, and swaps the styles
-    // so that the skeleton is hidden and actual content is showed
-    const imageLoaded = () => {
-        setImageStyles({
-            imgStyle: {
-                display: 'block',
-            },
-            skeleStyle: {
-                display: 'none',
-            },
-        });
-    };
+    const [imageStyles, imageLoaded] = useImageLoaded();
 
     return (
         <Link
             to={`${props.product?.id || '#'}`}
-            className={Styles.ProductCard}
-        >
+            className={Styles.ProductCard}>
             <img
                 src={props.product?.images.thumb}
                 alt={props.product?.title}
@@ -43,6 +23,12 @@ const ProductCard = (props) => {
                 className={Styles.ProductCard__img}
                 style={imageStyles.skeleStyle}
             />
+            {props.product?.quantity === 0 ? (
+                <div
+                    className={`${Styles.ProductCard__img} ${Styles.ProductCard__OutOfStock}`}>
+                    <p>Out of stock!</p>
+                </div>
+            ) : null}
             <h3>{props?.product?.title || <Skeleton />}</h3>
             <p>
                 {props.product ? (

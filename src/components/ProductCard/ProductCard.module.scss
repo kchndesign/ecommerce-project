@@ -6,6 +6,8 @@
 
     margin: 1rem 0;
 
+    position: relative;
+
     &__img {
         width: min(100%, 250px);
         height: 250px;
@@ -14,6 +16,25 @@
 
         // add slight filter to see boxes
         filter: brightness(0.92);
+    }
+
+    &__OutOfStock {
+        background-color: rgba(white, 0.7);
+        background: radial-gradient(
+            rgba(white, 1),
+            rgba(white, 0.6)
+        );
+
+        display: grid;
+        place-items: center;
+
+        p {
+            font-size: 1.2rem;
+        }
+
+        position: absolute;
+        top: 0;
+        left: 1rem;
     }
 
     h3 {
