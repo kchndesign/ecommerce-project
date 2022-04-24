@@ -1,9 +1,36 @@
 .HomePage {
     &__Heading {
-        font-size: clamp(2rem, 5vw, 6rem);
+        font-size: clamp(2.5rem, 5vw, 5rem);
+        margin: 3rem 0;
     }
 
-    a {
+    &__flexContainer {
+        margin: 5rem 0;
+
+        display: flex;
+        flex-wrap: wrap;
+
+        & > * {
+            flex-basis: 30rem;
+            // min-width: 30rem;
+            flex-grow: 1;
+        }
+    }
+
+    &__Link {
         display: block;
+        min-height: 24rem;
+        background-color: black;
+
+        display: grid;
+        place-content: center;
+
+        color: white;
+        text-decoration: none;
+
+        h2 {
+            font-size: 2rem;
+            font-style: italic;
+        }
     }
 }

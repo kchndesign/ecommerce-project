@@ -8,12 +8,20 @@ const HomePage = () => {
             <h1 className={Styles.HomePage__Heading}>
                 Kevin's Film Store
             </h1>
-            <Link className={Styles.HomePage__Link} to="film">
-                Shop Film
-            </Link>
-            <Link className={Styles.HomePage__Link} to="cameras">
-                Shop Film Cameras
-            </Link>
+            <section
+                aria-label="Navigation Links"
+                className={Styles.HomePage__flexContainer}>
+                <Link
+                    className={Styles.HomePage__Link}
+                    to="film">
+                    <h2>Shop Film</h2>
+                </Link>
+                <Link
+                    className={Styles.HomePage__Link}
+                    to="cameras">
+                    <h2>Shop Film Cameras</h2>
+                </Link>
+            </section>
         </>
     );
 };

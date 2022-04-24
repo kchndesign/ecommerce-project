@@ -1,3 +1,4 @@
+import HamburgerNavList from './HamburgerNavList';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Logo from '../../logo.png';
@@ -15,24 +16,8 @@ const NavBar = () => {
                         alt="store logo"
                     />
                 </Link>
-                <ul>
-                    <li>
-                        <Link
-                            className={Styles.Navbar__navLink}
-                            to="/film"
-                        >
-                            Film
-                        </Link>
-                    </li>
-                    <li>
-                        <Link
-                            className={Styles.Navbar__navLink}
-                            to="/cameras"
-                        >
-                            Cameras
-                        </Link>
-                    </li>
-                </ul>
+
+                <HamburgerNavList />
 
                 <Link to="/cart">
                     <img
