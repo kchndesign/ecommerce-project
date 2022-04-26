@@ -1,6 +1,5 @@
 import Description from './Description';
 import VariantButtons from './VariantButtons';
-import VariantButton from './VariantButton';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Styles from './ProductPage.module.scss';
@@ -19,6 +18,12 @@ const ProductPage = (props) => {
 
     const urlParams = useParams();
 
+    const localFavs = JSON.parse(
+        localStorage.getItem('favourites'),
+    );
+
+    const [isFavourite, setIsFavourite] = useState();
+
     // initial data fetch
     useEffect(() => {
         async function initCurrentProductData() {
@@ -28,6 +33,9 @@ const ProductPage = (props) => {
             );
             setCurrentVariant(data.variants[0]);
             setCurrentProductData(data);
+            setIsFavourite(
+                localFavs.some((item) => data.id === item),
+            );
         }
         initCurrentProductData();
     }, []);
@@ -35,6 +43,25 @@ const ProductPage = (props) => {
     // change variation to the variation of the button that was clicked
     const variantButtonClicked = (e) => {
         setCurrentVariant(e.target.innerText);
+    };
+
+    const handleOnFavourite = () => {
+        localFavs.push(urlParams.id);
+        localStorage.setItem(
+            'favourites',
+            JSON.stringify(localFavs),
+        );
+    };
+
+    const handleRemoveFavourite = () => {
+        localStorage.setItem(
+            'favourites',
+            JSON.stringify(
+                localFavs.filter(
+                    (item) => item !== urlParams.id,
+                ),
+            ),
+        );
     };
 
     return (
@@ -113,6 +140,16 @@ const ProductPage = (props) => {
                             <Skeleton />
                         )}
                     </p>
+
+                    {isFavourite ? (
+                        <button onClick={handleOnFavourite}>
+                            favourite this product
+                        </button>
+                    ) : (
+                        <button onClick={handleRemoveFavourite}>
+                            unfavourite this product
+                        </button>
+                    )}
                 </div>
             </div>
         </div>

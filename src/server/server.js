@@ -1,4 +1,4 @@
-import firestore from './firebase';
+import firestore, { firebase } from './firebase';
 
 export const getProducts = async (collection) => {
     try {
@@ -49,6 +49,68 @@ export const seedProducts = async (collection, products) => {
         });
         const responseArray = await Promise.all(promiseArray);
         return responseArray;
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+// access a manually added metadata documents from the firebase and get all
+// collections
+// search each collection for documents that match the array of queries
+// return every document found
+
+export const getProductsById = async (array) => {
+    if (
+        !Array.isArray(array) ||
+        array.length == 0 ||
+        array.some((item) => typeof item !== 'string')
+    ) {
+        return [null, null];
+    }
+
+    try {
+        const collectionsDoc = await firestore
+            .collection('metadata')
+            .doc('firestore')
+            .get();
+
+        const collectionsArr = collectionsDoc
+            .data()
+            .collections.map((string) =>
+                firestore.collection(string),
+            );
+
+        // this is an array of promises
+        const queryPromiseArray = collectionsArr.map(
+            (collection) => {
+                return collection.where(
+                    firebase.firestore.FieldPath.documentId(),
+                    'in',
+                    array,
+                );
+            },
+        );
+
+        // once each every promise is resolved, get() method to get the
+        // querysnapshot
+        const snapArr = await Promise.all(
+            queryPromiseArray.map((query) => query.get()),
+        );
+
+        const documentsArr = snapArr
+            .map((snapshot) => {
+                let resultsArr = [];
+                snapshot.forEach((doc) => {
+                    resultsArr.push({
+                        id: doc.id,
+                        ...doc.data(),
+                    });
+                });
+                return resultsArr;
+            })
+            .flat(2);
+
+        return documentsArr;
     } catch (error) {
         console.error(error);
     }
