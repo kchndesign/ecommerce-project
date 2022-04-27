@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Styles from './HamburgerNavList.module.scss';
-import Burger from '../../../burger.svg';
+import Burger from '../../../img/burger.svg';
 
 export function HamburgerNavList() {
     // boolean state to toggle classNames that will hide/display the dropdown menu
@@ -24,7 +24,8 @@ export function HamburgerNavList() {
                 <li>
                     <Link
                         className={Styles.NavLink}
-                        to="/cameras">
+                        to="/cameras"
+                    >
                         Cameras
                     </Link>
                 </li>
@@ -35,7 +36,8 @@ export function HamburgerNavList() {
                 aria-haspopup="true"
                 aria-expanded={dropDownIsActive}
                 className={`${Styles.HamburgerNavList__button} ${Styles.HamburgerNavList}`}
-                onClick={toggleActive}>
+                onClick={toggleActive}
+            >
                 <img
                     src={Burger}
                     alt="Open and close Nav"
@@ -52,19 +54,24 @@ export function HamburgerNavList() {
                     dropDownIsActive
                         ? Styles.isActive
                         : Styles.isNotActive
-                }`}>
+                }`}
+            >
                 <ul className={Styles.HamburgerNavList__list}>
                     <li>
                         <Link
                             className={Styles.NavLink}
-                            to="/film">
+                            to="/film"
+                            onClick={toggleActive}
+                        >
                             Film
                         </Link>
                     </li>
                     <li>
                         <Link
                             className={Styles.NavLink}
-                            to="/cameras">
+                            to="/cameras"
+                            onClick={toggleActive}
+                        >
                             Cameras
                         </Link>
                     </li>
@@ -81,7 +88,8 @@ export function HamburgerNavList() {
                     dropDownIsActive
                         ? Styles.isActive
                         : Styles.isNotActive
-                }`}></div>
+                }`}
+            ></div>
         </React.Fragment>
     );
 }

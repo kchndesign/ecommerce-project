@@ -1,8 +1,8 @@
 import HamburgerNavList from './HamburgerNavList';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Logo from '../../logo.png';
-import Cart from '../../cart.png';
+import Logo from '../../img/logo.png';
+import Cart from '../../img/cart.png';
 import Styles from './NavBar.module.scss';
 
 const NavBar = () => {

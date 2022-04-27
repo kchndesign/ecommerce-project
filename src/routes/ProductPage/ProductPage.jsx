@@ -7,65 +7,63 @@ import Skeleton from 'react-loading-skeleton';
 import { getProduct } from '../../server/server';
 import { Link } from 'react-router-dom';
 import useImageLoaded from '../../hooks/useImageLoaded';
+import useFavouritedItems from '../../hooks/useFavouritedItems';
 
 const ProductPage = (props) => {
     const [currentProductData, setCurrentProductData] = useState(
-        {},
+        {}
     );
-    const [currentVariant, setCurrentVariant] = useState('');
 
     const [imageStyles, imageLoaded] = useImageLoaded();
 
     const urlParams = useParams();
-
-    const localFavs = JSON.parse(
-        localStorage.getItem('favourites'),
-    );
-
-    const [isFavourite, setIsFavourite] = useState();
-
+    // *********************
     // initial data fetch
     useEffect(() => {
         async function initCurrentProductData() {
             const data = await getProduct(
                 urlParams.category,
-                urlParams,
+                urlParams
             );
             setCurrentVariant(data.variants[0]);
             setCurrentProductData(data);
-            setIsFavourite(
-                localFavs.some((item) => data.id === item),
-            );
         }
         initCurrentProductData();
     }, []);
 
+    // ************************
+    // VARIANT STATE MANAGEMENT
+    // ************************
+    const [currentVariant, setCurrentVariant] = useState('');
     // change variation to the variation of the button that was clicked
     const variantButtonClicked = (e) => {
         setCurrentVariant(e.target.innerText);
     };
 
+    // ***********************
+    // FAVOURITES STATE MANAGEMENT
+    // ***********************
+    const {
+        isFavourite,
+        pushFavouritedItem,
+        removeFavouritedItem,
+    } = useFavouritedItems(currentProductData.id);
+
+    // on favourite
     const handleOnFavourite = () => {
-        localFavs.push(urlParams.id);
-        localStorage.setItem(
-            'favourites',
-            JSON.stringify(localFavs),
-        );
+        pushFavouritedItem(currentProductData.id);
     };
 
+    // on remove favourite
     const handleRemoveFavourite = () => {
-        localStorage.setItem(
-            'favourites',
-            JSON.stringify(
-                localFavs.filter(
-                    (item) => item !== urlParams.id,
-                ),
-            ),
-        );
+        removeFavouritedItem(currentProductData.id);
     };
 
     return (
         <div className={Styles.ProductPage}>
+            {/* BREADCRUMBS */}
+            {/* breadcrumbs film > film_product for example */}
+
             <p className={Styles.ProductPage__breadcrumb}>
                 <Link to={`/${urlParams.category}`}>
                     {urlParams.category.charAt(0).toUpperCase() +
@@ -73,13 +71,23 @@ const ProductPage = (props) => {
                 </Link>{' '}
                 &gt;{' '}
                 <Link
-                    to={`/${urlParams.category}/${urlParams.id}`}>
+                    to={`/${urlParams.category}/${urlParams.id}`}
+                >
                     {currentProductData.title || (
                         <Skeleton inline={true} width="5rem" />
                     )}
                 </Link>
             </p>
+
+            {/* container allows side by side on desktop sized windows */}
+
             <div className={Styles.ProductPage__container}>
+                {/* IMAGE CONTAINER */}
+                {/* Initially: image display: none, skeleton display: block */}
+                {/* when image loads, the styles swap so that the image is displayed */}
+
+                {/* Image also changes when the variant changes. Will search the images object for the variant key and retrieves the value which is a link to an image. */}
+
                 <div className={Styles.ProductPage__image}>
                     <img
                         src={
@@ -97,12 +105,20 @@ const ProductPage = (props) => {
                         }
                     />
                 </div>
+
+                {/* product info container for title, price, description, quantity and buttons */}
+
                 <div className={Styles.ProductPage__info}>
+                    {/* TITLE */}
+
                     <h2 className={Styles.ProductPage__title}>
                         {currentProductData.title || (
                             <Skeleton />
                         )}
                     </h2>
+
+                    {/* PRICE */}
+
                     <p className={Styles.ProductPage__price}>
                         {currentProductData?.price ? (
                             `$${currentProductData.price}`
@@ -111,9 +127,15 @@ const ProductPage = (props) => {
                         )}
                     </p>
 
+                    {/* DESCRIPION */}
+                    {/* description in a seperate component: renders a list of paragraphs delineated by \n in the data */}
+
                     <Description
                         currentProductData={currentProductData}
                     />
+
+                    {/* VARIANT BUTTONS */}
+                    {/* variant buttons component renders a list of buttons as per the array of variants in the data. Each variant will have a corresponding image */}
 
                     <VariantButtons
                         currentVariant={currentVariant}
@@ -122,6 +144,9 @@ const ProductPage = (props) => {
                         }
                         currentProductData={currentProductData}
                     />
+
+                    {/* QUANTITY */}
+                    {/* some logic here to differentiate between out of stock and in stock */}
 
                     <p className={Styles.ProductPage__quantity}>
                         {currentProductData?.quantity != null ? (
@@ -141,12 +166,26 @@ const ProductPage = (props) => {
                         )}
                     </p>
 
-                    {isFavourite ? (
-                        <button onClick={handleOnFavourite}>
+                    {/* FAVOURITE BUTTONS */}
+                    {/* swap out buttons if the product is favourited or not */}
+                    {/* each button references its corresponding click handler function */}
+
+                    {!isFavourite ? (
+                        <button
+                            className={
+                                Styles.ProductPage__favButton
+                            }
+                            onClick={handleOnFavourite}
+                        >
                             favourite this product
                         </button>
                     ) : (
-                        <button onClick={handleRemoveFavourite}>
+                        <button
+                            className={
+                                Styles.ProductPage__favButton
+                            }
+                            onClick={handleRemoveFavourite}
+                        >
                             unfavourite this product
                         </button>
                     )}

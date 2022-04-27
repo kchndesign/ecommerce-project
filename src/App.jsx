@@ -23,20 +23,26 @@ function App() {
             <NavBar />
             <main className={Styles.App}>
                 <Routes>
+                    {/* home page displays links to categories and favourited products */}
                     <Route path="/" element={<HomePage />} />
+
+                    {/* page that displays grid of products and featured products */}
                     <Route
                         path="/:category"
                         element={<ProductsPage />}
                     />
+
+                    {/* page displays more information on individual products */}
                     <Route
                         path="/:category/:id"
                         element={<ProductPage />}
                     />
 
-                    <Route
+                    {/* page for dev to populate database */}
+                    {/* <Route
                         path="/seedProducts"
                         element={<SeedServer />}
-                    />
+                    /> */}
                 </Routes>
             </main>
         </Router>

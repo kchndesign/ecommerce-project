@@ -65,7 +65,7 @@ export const getProductsById = async (array) => {
         array.length == 0 ||
         array.some((item) => typeof item !== 'string')
     ) {
-        return [null, null];
+        return [];
     }
 
     try {
@@ -77,7 +77,7 @@ export const getProductsById = async (array) => {
         const collectionsArr = collectionsDoc
             .data()
             .collections.map((string) =>
-                firestore.collection(string),
+                firestore.collection(string)
             );
 
         // this is an array of promises
@@ -86,15 +86,15 @@ export const getProductsById = async (array) => {
                 return collection.where(
                     firebase.firestore.FieldPath.documentId(),
                     'in',
-                    array,
+                    array
                 );
-            },
+            }
         );
 
         // once each every promise is resolved, get() method to get the
         // querysnapshot
         const snapArr = await Promise.all(
-            queryPromiseArray.map((query) => query.get()),
+            queryPromiseArray.map((query) => query.get())
         );
 
         const documentsArr = snapArr

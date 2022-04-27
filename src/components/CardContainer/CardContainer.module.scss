@@ -10,4 +10,13 @@
         flex-shrink: 0;
         flex-grow: 0;
     }
+
+    &__placeholder {
+        height: 10rem;
+        display: grid;
+        place-content: center;
+        p {
+            font-size: 1.25rem;
+        }
+    }
 }
