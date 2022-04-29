@@ -1,13 +1,13 @@
-import Description from './Description';
-import VariantButtons from './VariantButtons';
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import Styles from './ProductPage.module.scss';
-import Skeleton from 'react-loading-skeleton';
-import { getProduct } from '../../server/server';
-import { Link } from 'react-router-dom';
-import useImageLoaded from '../../hooks/useImageLoaded';
-import useFavouritedItem from '../../hooks/useFavouritedItem';
+import Description from "./Description";
+import VariantButtons from "./VariantButtons";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import Styles from "./ProductPage.module.scss";
+import Skeleton from "react-loading-skeleton";
+import { getProduct } from "../../server/server";
+import { Link } from "react-router-dom";
+import useImageLoaded from "../../hooks/useImageLoaded";
+import useFavouritedItem from "../../hooks/useFavouritedItem";
 
 const ProductPage = (props) => {
     const [currentProductData, setCurrentProductData] = useState(
@@ -36,7 +36,7 @@ const ProductPage = (props) => {
     // ************************
     // VARIANT STATE MANAGEMENT
     // ************************
-    const [currentVariant, setCurrentVariant] = useState('');
+    const [currentVariant, setCurrentVariant] = useState("");
     // change variation to the variation of the button that was clicked
     const variantButtonClicked = (e) => {
         setCurrentVariant(e.target.innerText);
@@ -70,8 +70,8 @@ const ProductPage = (props) => {
                 <Link to={`/${urlParams.category}`}>
                     {urlParams.category.charAt(0).toUpperCase() +
                         urlParams.category.slice(1)}
-                </Link>{' '}
-                &gt;{' '}
+                </Link>{" "}
+                &gt;{" "}
                 <Link
                     to={`/${urlParams.category}/${urlParams.id}`}
                 >
@@ -98,11 +98,15 @@ const ProductPage = (props) => {
                             ]
                         }
                         onLoad={imageLoaded}
-                        style={imageStyles.imgStyle}
+                        style={
+                            imageStyles.visibleAfterImageLoads
+                        }
                         alt={currentProductData.title}
                     />
                     <Skeleton
-                        style={imageStyles.skeleStyle}
+                        style={
+                            imageStyles.visibleBeforeImageLoads
+                        }
                         className={
                             Styles.ProductPage__imagePlaceholder
                         }
@@ -158,7 +162,7 @@ const ProductPage = (props) => {
                                     <strong>In Stock: </strong>
                                     {
                                         currentProductData.quantity
-                                    }{' '}
+                                    }{" "}
                                     left
                                 </>
                             ) : (

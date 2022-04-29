@@ -1,12 +1,12 @@
-import React from 'react';
-import Styles from './ProductCard.module.scss';
-import { Link } from 'react-router-dom';
-import Skeleton from 'react-loading-skeleton';
-import useImageLoaded from '../../hooks/useImageLoaded.js';
-import AddFav from '../../img/add-to-favorites.svg';
+import React from "react";
+import Styles from "./ProductCard.module.scss";
+import { Link } from "react-router-dom";
+import Skeleton from "react-loading-skeleton";
+import useImageLoaded from "../../hooks/useImageLoaded.js";
+import AddFav from "../../img/add-to-favorites.svg";
 
-import Faved from '../../img/red-heart.svg';
-import useFavouritedItem from '../../hooks/useFavouritedItem';
+import Faved from "../../img/red-heart.svg";
+import useFavouritedItem from "../../hooks/useFavouritedItem";
 
 const ProductCard = (props) => {
     // default css styles shows skeleton instead of image
@@ -31,13 +31,13 @@ const ProductCard = (props) => {
                     alt={props.product?.title}
                     className={Styles.ProductCard__img}
                     onLoad={imageLoaded}
-                    style={imageStyles.imgStyle}
+                    style={imageStyles.visibleAfterImageLoads}
                 />
 
                 {/* Product Image placeholder */}
                 <Skeleton
                     className={Styles.ProductCard__img}
-                    style={imageStyles.skeleStyle}
+                    style={imageStyles.visibleBeforeImageLoads}
                 />
 
                 {/* White out of stock overlay displays when the quantity is 0 */}
@@ -56,8 +56,8 @@ const ProductCard = (props) => {
                         src={Faved}
                         alt={
                             isFavourite
-                                ? 'favourited product'
-                                : 'add favourite product'
+                                ? "favourited product"
+                                : "add favourite product"
                         }
                         className={Styles.ProductCard__favIcon}
                     />

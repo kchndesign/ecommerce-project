@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 const useImageLoaded = () => {
     // css states to show skeleton instead of image
     const [imageStyles, setImageStyles] = useState({
-        imgStyle: {
-            display: 'none',
+        visibleAfterImageLoads: {
+            display: "none",
         },
-        skeleStyle: {
-            display: 'block',
+        visibleBeforeImageLoads: {
+            display: "block",
         },
     });
 
@@ -15,16 +15,27 @@ const useImageLoaded = () => {
     // so that the skeleton is hidden and actual content is showed
     const imageLoaded = () => {
         setImageStyles({
-            imgStyle: {
-                display: 'block',
+            visibleAfterImageLoads: {
+                display: "block",
             },
-            skeleStyle: {
-                display: 'none',
+            visibleBeforeImageLoads: {
+                display: "none",
             },
         });
     };
 
-    return [imageStyles, imageLoaded];
+    const resetImageLoaded = () => {
+        setImageStyles({
+            visibleAfterImageLoads: {
+                display: "none",
+            },
+            visibleBeforeImageLoads: {
+                display: "block",
+            },
+        });
+    };
+
+    return [imageStyles, imageLoaded, resetImageLoaded];
 };
 
 export default useImageLoaded;
