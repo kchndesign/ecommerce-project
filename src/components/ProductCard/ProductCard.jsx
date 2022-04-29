@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Styles from './ProductCard.module.scss';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
 import useImageLoaded from '../../hooks/useImageLoaded.js';
 import AddFav from '../../img/add-to-favorites.svg';
 
 import Faved from '../../img/red-heart.svg';
-import useFavouritedItems from '../../hooks/useFavouritedItems';
+import useFavouritedItem from '../../hooks/useFavouritedItem';
 
 const ProductCard = (props) => {
     // default css styles shows skeleton instead of image
@@ -16,9 +16,7 @@ const ProductCard = (props) => {
     // state management for favourited
     // ******************
 
-    const { isFavourite } = useFavouritedItems(
-        props.product?.id
-    );
+    const { isFavourite } = useFavouritedItem(props.product?.id);
 
     return (
         <Link

@@ -21,7 +21,7 @@ import { useState } from 'react';
 // clearFavourites()
 // remove all of the previous entries and replace with an empty array
 
-const useFavouritedItems = (initialString) => {
+const useFavouritedItem = (initialString) => {
     // inital check for the localStorage 'favourites' entry
     // this happens every time useFavouritedItems is called
     // to avoid errors later on.
@@ -115,4 +115,4 @@ const useFavouritedItems = (initialString) => {
     };
 };
 
-export default useFavouritedItems;
+export default useFavouritedItem;

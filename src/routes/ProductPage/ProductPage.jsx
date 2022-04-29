@@ -7,7 +7,7 @@ import Skeleton from 'react-loading-skeleton';
 import { getProduct } from '../../server/server';
 import { Link } from 'react-router-dom';
 import useImageLoaded from '../../hooks/useImageLoaded';
-import useFavouritedItems from '../../hooks/useFavouritedItems';
+import useFavouritedItem from '../../hooks/useFavouritedItem';
 
 const ProductPage = (props) => {
     const [currentProductData, setCurrentProductData] = useState(
@@ -17,8 +17,10 @@ const ProductPage = (props) => {
     const [imageStyles, imageLoaded] = useImageLoaded();
 
     const urlParams = useParams();
+
     // *********************
-    // initial data fetch
+    // INITIAL DATA FETCH
+    // *********************
     useEffect(() => {
         async function initCurrentProductData() {
             const data = await getProduct(
@@ -47,7 +49,7 @@ const ProductPage = (props) => {
         isFavourite,
         pushFavouritedItem,
         removeFavouritedItem,
-    } = useFavouritedItems(currentProductData.id);
+    } = useFavouritedItem(urlParams.id);
 
     // on favourite
     const handleOnFavourite = () => {
@@ -97,6 +99,7 @@ const ProductPage = (props) => {
                         }
                         onLoad={imageLoaded}
                         style={imageStyles.imgStyle}
+                        alt={currentProductData.title}
                     />
                     <Skeleton
                         style={imageStyles.skeleStyle}
