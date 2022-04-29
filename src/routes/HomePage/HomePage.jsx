@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import CardContainer from '../../components/CardContainer';
-import ProductCard from '../../components/ProductCard';
-import { getProductsById } from '../../server/server';
-import Styles from './HomePage.module.scss';
-import FilmImage from '../../img/film-image.jpg';
-import CameraImage from '../../img/film-camera-image.jpg';
-import useAllFavouritedItems from '../../hooks/useAllFavouriteItems';
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import CardContainer from "../../components/CardContainer";
+import ProductCard from "../../components/ProductCard";
+import { getProductsById } from "../../server/server";
+import Styles from "./HomePage.module.scss";
+import FilmImage from "../../img/film-image.jpg";
+import CameraImage from "../../img/film-camera-image.jpg";
+import useAllFavouritedItems from "../../hooks/useAllFavouriteItems";
 
 const HomePage = () => {
     // *********************
@@ -25,8 +25,6 @@ const HomePage = () => {
 
     // on component mount and when listOfFavourites changes, update product IDs array, and load the product data from firestore using the array of product IDs
     useEffect(() => {
-        console.log('use effect triggered');
-        console.log(listOfFavourites);
         async function fetchFavProducts(array) {
             setFavProducts(await getProductsById(array));
         }

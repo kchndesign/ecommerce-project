@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import Skeleton from "react-loading-skeleton";
 import Styles from "./Carousel.module.scss";
 import { Link } from "react-router-dom";
@@ -70,12 +70,13 @@ const Carousel = (props) => {
                                         ] ||
                                         product.images?.["thumb"]
                                     }
+                                    alt={product.title}
                                     key={product.id}
                                     className={
                                         Styles.CarouselItem__image
                                     }
                                     onLoad={
-                                        index == 0
+                                        index === 0
                                             ? imageLoaded
                                             : null
                                     }
