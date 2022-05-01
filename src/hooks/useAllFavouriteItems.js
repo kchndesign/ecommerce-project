@@ -1,3 +1,7 @@
+// This hook is for components that needs to use and manipulate the whole array of favourited items.
+// This is only used once so could probably just be a useReducer or something.
+// I originally wrote this to make sure that the component that uses it will do the same initial check as the useFavouritedItem hook.
+
 import { useState } from "react";
 
 const useAllFavouritedItems = (initialString) => {

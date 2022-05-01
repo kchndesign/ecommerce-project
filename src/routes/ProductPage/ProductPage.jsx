@@ -1,50 +1,136 @@
-import Description from "./Description";
-import VariantButtons from "./VariantButtons";
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import Styles from "./ProductPage.module.scss";
-import Skeleton from "react-loading-skeleton";
-import { getProduct } from "../../server/server";
-import { Link } from "react-router-dom";
-import useImageLoaded from "../../hooks/useImageLoaded";
-import useFavouritedItem from "../../hooks/useFavouritedItem";
+import Description from './Description';
+import VariantButtons from './VariantButtons';
+import React, { useEffect, useReducer, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import Styles from './ProductPage.module.scss';
+import Skeleton from 'react-loading-skeleton';
+import { getProduct } from '../../server/server';
+import { Link } from 'react-router-dom';
+import useImageLoaded from '../../hooks/useImageLoaded';
+import useFavouritedItem from '../../hooks/useFavouritedItem';
+import QuantityInput from '../../components/QuantityInput';
 
-const ProductPage = (props) => {
+// This reducer is used to manage the cart object "currentSelections" that might be sent to the cart when the user presses add to cart.
+
+// the cart object needs to contain:
+// the current variant selected
+// the quantity of the order
+// the the product id
+
+// The currentSelections will also serve as the state for the object to be used by elements on the page. e.g. the current variants will be used by the variant buttons and the image.
+
+// REDUCER FUNCTION
+// reducer allows us to set variant and set quantity with a dispatch function
+const reducer = (state, action) => {
+    switch (action.type) {
+        case 'setCurrentVariant':
+            return { ...state, currentVariant: action.payload };
+        case 'setCurrentQuantity':
+            return { ...state, currentQuantity: action.payload };
+        default:
+            throw new Error();
+    }
+};
+
+const ProductPage = () => {
+    // =================================
+    // Setting up our product data state
+    // this is the state that will hold the fetched product data
+    // not to be confused with the currentSelections object to be sent to the cart
+    // =================================
+
     const [currentProductData, setCurrentProductData] = useState(
         {}
     );
 
-    const [imageStyles, imageLoaded] = useImageLoaded();
+    // =================================
+    // Setting up our url parameters
+    // =================================
 
     const urlParams = useParams();
 
-    // *********************
-    // INITIAL DATA FETCH
-    // *********************
-    useEffect(() => {
-        async function initCurrentProductData() {
-            const data = await getProduct(
-                urlParams.category,
-                urlParams
-            );
-            setCurrentVariant(data.variants[0]);
-            setCurrentProductData(data);
-        }
-        initCurrentProductData();
-    }, []);
+    // ==================================
+    // Setting up our reducer function for the cart object
+    // ==================================
 
-    // ************************
-    // VARIANT STATE MANAGEMENT
-    // ************************
-    const [currentVariant, setCurrentVariant] = useState("");
-    // change variation to the variation of the button that was clicked
-    const variantButtonClicked = (e) => {
-        setCurrentVariant(e.target.innerText);
+    // we need to make sure that the product id is present in the cart object
+    const initialState = {
+        currentVariant: '',
+        currentQuantity: 1,
+        productId: urlParams.id,
     };
 
-    // ***********************
-    // FAVOURITES STATE MANAGEMENT
-    // ***********************
+    const [currentSelections, dispatch] = useReducer(
+        reducer,
+        initialState
+    );
+
+    // =================================
+    // CHANGE CART OBJECT QUANTITY
+    // according to inputs from the QuantityInput components
+    // =================================
+
+    // check if the input will be in range
+    // then set the state (which will be bound to the input value)
+    const handleQuantityPlus = () => {
+        if (
+            currentSelections.currentQuantity <
+            currentProductData?.quantity
+        ) {
+            dispatch({
+                type: 'setCurrentQuantity',
+                payload: currentSelections.currentQuantity + 1,
+            });
+        }
+    };
+
+    const handleQuantityMinus = () => {
+        if (currentSelections.currentQuantity > 1) {
+            dispatch({
+                type: 'setCurrentQuantity',
+                payload: currentSelections.currentQuantity - 1,
+            });
+        }
+    };
+
+    // if the user types into the quantity input,
+    // check if the input is in range
+    // then set the state
+    const handleQuantityInput = (event) => {
+        if (
+            1 < event.target.value &&
+            event.target.value <= currentProductData?.quantity
+        ) {
+            dispatch({
+                type: 'setCurrentQuantity',
+                payload: event.target.value,
+            });
+        }
+    };
+
+    // =================================
+    // CHANGE SELECTED VARIANT
+    // =================================
+
+    // event handler for the variant buttons, we will change the selection on our cart object
+    const variantButtonClicked = (e) => {
+        dispatch({
+            type: 'setCurrentVariant',
+            payload: e.target.innerText,
+        });
+    };
+
+    // =================================
+    // Setting up our image styles hook
+    // this allows us to swap a skeleton placeholder for an actual image once it is loaded
+    // =================================
+
+    const [imageStyles, imageLoaded] = useImageLoaded();
+
+    // =================================
+    // Setting up our favourites hook and event handlers
+    // =================================
+
     const {
         isFavourite,
         pushFavouritedItem,
@@ -61,6 +147,36 @@ const ProductPage = (props) => {
         removeFavouritedItem(currentProductData.id);
     };
 
+    // =================================
+    // INITIAL DATA FETCH
+    // put the data into the currentProductData state
+    // =================================
+
+    // await product data
+    // dispatch current variant arbitrarily to the first in the array
+    // then set the current product data
+
+    useEffect(() => {
+        async function initCurrentProductData() {
+            const data = await getProduct(
+                urlParams.category,
+                urlParams
+            );
+
+            dispatch({
+                type: 'setCurrentVariant',
+                payload: data.variants[0],
+            });
+
+            setCurrentProductData(data);
+        }
+        initCurrentProductData();
+    }, []);
+
+    // =================================
+    // START MARKUP
+    // =================================
+
     return (
         <div className={Styles.ProductPage}>
             {/* BREADCRUMBS */}
@@ -70,8 +186,8 @@ const ProductPage = (props) => {
                 <Link to={`/${urlParams.category}`}>
                     {urlParams.category.charAt(0).toUpperCase() +
                         urlParams.category.slice(1)}
-                </Link>{" "}
-                &gt;{" "}
+                </Link>{' '}
+                &gt;{' '}
                 <Link
                     to={`/${urlParams.category}/${urlParams.id}`}
                 >
@@ -94,7 +210,7 @@ const ProductPage = (props) => {
                     <img
                         src={
                             currentProductData.images?.[
-                                currentVariant
+                                currentSelections?.currentVariant
                             ]
                         }
                         onLoad={imageLoaded}
@@ -145,14 +261,26 @@ const ProductPage = (props) => {
                     {/* variant buttons component renders a list of buttons as per the array of variants in the data. Each variant will have a corresponding image */}
 
                     <VariantButtons
-                        currentVariant={currentVariant}
+                        currentVariant={
+                            currentSelections?.currentVariant
+                        }
                         variantButtonClicked={
                             variantButtonClicked
                         }
                         currentProductData={currentProductData}
                     />
 
-                    {/* QUANTITY */}
+                    {/* QUANTITY INPUT */}
+                    {/* input the quantity for the add to cart functionality */}
+
+                    <QuantityInput
+                        value={currentSelections.currentQuantity}
+                        handleIncrement={handleQuantityPlus}
+                        handleDecrement={handleQuantityMinus}
+                        onInput={handleQuantityInput}
+                    />
+
+                    {/* QUANTITY TEXT */}
                     {/* some logic here to differentiate between out of stock and in stock */}
 
                     <p className={Styles.ProductPage__quantity}>
@@ -162,7 +290,7 @@ const ProductPage = (props) => {
                                     <strong>In Stock: </strong>
                                     {
                                         currentProductData.quantity
-                                    }{" "}
+                                    }{' '}
                                     left
                                 </>
                             ) : (

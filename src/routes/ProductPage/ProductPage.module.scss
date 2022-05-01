@@ -71,6 +71,19 @@
         }
     }
 
+    label {
+        display: block;
+    }
+
+    &__quantityInput {
+        display: block;
+        box-sizing: border-box;
+        font-size: 1rem;
+        height: 3rem;
+        padding: 0.5rem;
+        width: 6rem;
+    }
+
     &__favButton {
         background-color: white;
         border: 1px solid rgb(150, 150, 150);
