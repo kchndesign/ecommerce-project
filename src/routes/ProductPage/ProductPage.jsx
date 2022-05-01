@@ -34,7 +34,7 @@ const reducer = (state, action) => {
 
 const ProductPage = () => {
     // =================================
-    // Setting up our product data state
+    // setting up PRODUCT DATA STATE
     // this is the state that will hold the fetched product data
     // not to be confused with the currentSelections object to be sent to the cart
     // =================================
@@ -44,7 +44,7 @@ const ProductPage = () => {
     );
 
     // =================================
-    // Setting up our url parameters
+    // Setting up our URL PARAMETERS
     // =================================
 
     const urlParams = useParams();

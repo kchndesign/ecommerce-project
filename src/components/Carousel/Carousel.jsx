@@ -1,9 +1,9 @@
-import React, { useEffect, useRef } from "react";
-import Skeleton from "react-loading-skeleton";
-import Styles from "./Carousel.module.scss";
-import { Link } from "react-router-dom";
-import { Carousel as ResponsiveCarousel } from "react-responsive-carousel";
-import useImageLoaded from "../../hooks/useImageLoaded";
+import React, { useEffect, useRef } from 'react';
+import Skeleton from 'react-loading-skeleton';
+import Styles from './Carousel.module.scss';
+import { Link } from 'react-router-dom';
+import { Carousel as ResponsiveCarousel } from 'react-responsive-carousel';
+import useImageLoaded from '../../hooks/useImageLoaded';
 
 // loop through the given array of featured products and render a
 // child for the carousel library.
@@ -11,6 +11,7 @@ import useImageLoaded from "../../hooks/useImageLoaded";
 const Carousel = (props) => {
     // ***************
     // MEMOIZE PREVIOUS CATEGORY
+    // this is needed because react will send a new props object down that is identical in values to the previous one. This results in our carousel re-displaying the loading skeleton but the images never trigger onLoad (because they are already loaded).
     // ****************
     let previousCategory = useRef();
 
@@ -20,7 +21,7 @@ const Carousel = (props) => {
         previousCategory.current = props.featuredProducts;
     }, []);
 
-    // ********
+    // ************
     // IMAGE AND SKELETON STATE MANAGEMENT
     // ************
     const [imageStyles, imageLoaded, resetImageLoaded] =
@@ -31,7 +32,7 @@ const Carousel = (props) => {
     // we have to do this because React is sending new props to this component
     // with the same values even when the route doesnt change.
     useEffect(() => {
-        // if the value of the props are not the same:
+        // if the value of the new props are not the same as the memoised previous props:
         if (
             JSON.stringify(props.featuredProducts) !==
             JSON.stringify(previousCategory.current)
@@ -66,9 +67,9 @@ const Carousel = (props) => {
                                 <img
                                     src={
                                         product.images?.[
-                                            "featured"
+                                            'featured'
                                         ] ||
-                                        product.images?.["thumb"]
+                                        product.images?.['thumb']
                                     }
                                     alt={product.title}
                                     key={product.id}
