@@ -39,14 +39,20 @@
     }
 
     &__info {
+        & > hr,
+        & > p {
+            margin-bottom: 2rem;
+        }
+
         max-width: 30rem;
         margin: 0 auto;
 
         @media screen and (min-width: 768px) {
             max-width: none;
-            width: 100%;
             margin: 0 0;
             padding-left: 2rem;
+
+            text-align: left;
         }
     }
 

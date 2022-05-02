@@ -40,7 +40,7 @@ const ProductPage = () => {
     // =================================
 
     const [currentProductData, setCurrentProductData] = useState(
-        {}
+        {},
     );
 
     // =================================
@@ -62,7 +62,7 @@ const ProductPage = () => {
 
     const [currentSelections, dispatch] = useReducer(
         reducer,
-        initialState
+        initialState,
     );
 
     // =================================
@@ -160,7 +160,7 @@ const ProductPage = () => {
         async function initCurrentProductData() {
             const data = await getProduct(
                 urlParams.category,
-                urlParams
+                urlParams,
             );
 
             dispatch({
@@ -189,8 +189,7 @@ const ProductPage = () => {
                 </Link>{' '}
                 &gt;{' '}
                 <Link
-                    to={`/${urlParams.category}/${urlParams.id}`}
-                >
+                    to={`/${urlParams.category}/${urlParams.id}`}>
                     {currentProductData.title || (
                         <Skeleton inline={true} width="5rem" />
                     )}
@@ -257,6 +256,8 @@ const ProductPage = () => {
                         currentProductData={currentProductData}
                     />
 
+                    <hr />
+
                     {/* VARIANT BUTTONS */}
                     {/* variant buttons component renders a list of buttons as per the array of variants in the data. Each variant will have a corresponding image */}
 
@@ -301,6 +302,8 @@ const ProductPage = () => {
                         )}
                     </p>
 
+                    <hr />
+
                     {/* FAVOURITE BUTTONS */}
                     {/* swap out buttons if the product is favourited or not */}
                     {/* each button references its corresponding click handler function */}
@@ -310,8 +313,7 @@ const ProductPage = () => {
                             className={
                                 Styles.ProductPage__favButton
                             }
-                            onClick={handleOnFavourite}
-                        >
+                            onClick={handleOnFavourite}>
                             favourite this product
                         </button>
                     ) : (
@@ -319,8 +321,7 @@ const ProductPage = () => {
                             className={
                                 Styles.ProductPage__favButton
                             }
-                            onClick={handleRemoveFavourite}
-                        >
+                            onClick={handleRemoveFavourite}>
                             unfavourite this product
                         </button>
                     )}
