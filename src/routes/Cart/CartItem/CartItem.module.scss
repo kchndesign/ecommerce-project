@@ -1,0 +1,26 @@
+.CartItem {
+    &__flex {
+        // MOBILE FIRST STYLING
+        // vertical
+        display: grid;
+        grid-template-areas: 'a' 'b', 'a' 'c';
+        row-gap: 2rem;
+
+        @media screen and (min-width: 650px) {
+        }
+    }
+
+    &:hover {
+        background-color: #f1f1f1;
+    }
+
+    hr {
+        &:first-of-type {
+            margin-bottom: 1rem;
+        }
+
+        &:last-of-type {
+            margin-top: 1rem;
+        }
+    }
+}

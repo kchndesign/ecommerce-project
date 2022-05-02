@@ -39,8 +39,7 @@
     }
 
     &__info {
-        & > hr,
-        & > p {
+        & > * {
             margin-bottom: 2rem;
         }
 
@@ -60,7 +59,6 @@
         font-size: 1.5rem;
         font-weight: bold;
         color: #333;
-        margin-bottom: 2rem;
     }
 
     &__title {
@@ -70,8 +68,6 @@
     }
 
     &__desc {
-        margin-bottom: 2rem;
-
         p {
             margin-bottom: 0.5rem;
         }
@@ -79,15 +75,6 @@
 
     label {
         display: block;
-    }
-
-    &__quantityInput {
-        display: block;
-        box-sizing: border-box;
-        font-size: 1rem;
-        height: 3rem;
-        padding: 0.5rem;
-        width: 6rem;
     }
 
     &__favButton {

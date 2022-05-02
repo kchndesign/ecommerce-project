@@ -9,13 +9,15 @@ import { Link } from 'react-router-dom';
 import useImageLoaded from '../../hooks/useImageLoaded';
 import useFavouritedItem from '../../hooks/useFavouritedItem';
 import QuantityInput from '../../components/QuantityInput';
+import useAddToCart from '../../hooks/useAddToCart';
 
 // This reducer is used to manage the cart object "currentSelections" that might be sent to the cart when the user presses add to cart.
 
 // the cart object needs to contain:
 // the current variant selected
 // the quantity of the order
-// the the product id
+// the product id
+// the product category
 
 // The currentSelections will also serve as the state for the object to be used by elements on the page. e.g. the current variants will be used by the variant buttons and the image.
 
@@ -39,9 +41,7 @@ const ProductPage = () => {
     // not to be confused with the currentSelections object to be sent to the cart
     // =================================
 
-    const [currentProductData, setCurrentProductData] = useState(
-        {},
-    );
+    const [currentProductData, setCurrentProductData] = useState({});
 
     // =================================
     // Setting up our URL PARAMETERS
@@ -58,12 +58,10 @@ const ProductPage = () => {
         currentVariant: '',
         currentQuantity: 1,
         productId: urlParams.id,
+        category: urlParams.category,
     };
 
-    const [currentSelections, dispatch] = useReducer(
-        reducer,
-        initialState,
-    );
+    const [currentSelections, dispatch] = useReducer(reducer, initialState);
 
     // =================================
     // CHANGE CART OBJECT QUANTITY
@@ -73,10 +71,7 @@ const ProductPage = () => {
     // check if the input will be in range
     // then set the state (which will be bound to the input value)
     const handleQuantityPlus = () => {
-        if (
-            currentSelections.currentQuantity <
-            currentProductData?.quantity
-        ) {
+        if (currentSelections.currentQuantity < currentProductData?.quantity) {
             dispatch({
                 type: 'setCurrentQuantity',
                 payload: currentSelections.currentQuantity + 1,
@@ -131,11 +126,8 @@ const ProductPage = () => {
     // Setting up our favourites hook and event handlers
     // =================================
 
-    const {
-        isFavourite,
-        pushFavouritedItem,
-        removeFavouritedItem,
-    } = useFavouritedItem(urlParams.id);
+    const { isFavourite, pushFavouritedItem, removeFavouritedItem } =
+        useFavouritedItem(urlParams.id);
 
     // on favourite
     const handleOnFavourite = () => {
@@ -145,6 +137,18 @@ const ProductPage = () => {
     // on remove favourite
     const handleRemoveFavourite = () => {
         removeFavouritedItem(currentProductData.id);
+    };
+
+    // =================================
+    // SETTING UP ADD TO CART HOOK
+    // =================================
+
+    const [isAddedToCart, addProductToCart] = useAddToCart(urlParams.id);
+
+    // event handler for adding to cart
+    // call the add to cart function with the users selections
+    const handleOnAddCart = () => {
+        addProductToCart(currentSelections);
     };
 
     // =================================
@@ -158,10 +162,7 @@ const ProductPage = () => {
 
     useEffect(() => {
         async function initCurrentProductData() {
-            const data = await getProduct(
-                urlParams.category,
-                urlParams,
-            );
+            const data = await getProduct(urlParams.category, urlParams);
 
             dispatch({
                 type: 'setCurrentVariant',
@@ -188,8 +189,7 @@ const ProductPage = () => {
                         urlParams.category.slice(1)}
                 </Link>{' '}
                 &gt;{' '}
-                <Link
-                    to={`/${urlParams.category}/${urlParams.id}`}>
+                <Link to={`/${urlParams.category}/${urlParams.id}`}>
                     {currentProductData.title || (
                         <Skeleton inline={true} width="5rem" />
                     )}
@@ -213,18 +213,12 @@ const ProductPage = () => {
                             ]
                         }
                         onLoad={imageLoaded}
-                        style={
-                            imageStyles.visibleAfterImageLoads
-                        }
+                        style={imageStyles.visibleAfterImageLoads}
                         alt={currentProductData.title}
                     />
                     <Skeleton
-                        style={
-                            imageStyles.visibleBeforeImageLoads
-                        }
-                        className={
-                            Styles.ProductPage__imagePlaceholder
-                        }
+                        style={imageStyles.visibleBeforeImageLoads}
+                        className={Styles.ProductPage__imagePlaceholder}
                     />
                 </div>
 
@@ -234,9 +228,7 @@ const ProductPage = () => {
                     {/* TITLE */}
 
                     <h2 className={Styles.ProductPage__title}>
-                        {currentProductData.title || (
-                            <Skeleton />
-                        )}
+                        {currentProductData.title || <Skeleton />}
                     </h2>
 
                     {/* PRICE */}
@@ -252,9 +244,7 @@ const ProductPage = () => {
                     {/* DESCRIPION */}
                     {/* description in a seperate component: renders a list of paragraphs delineated by \n in the data */}
 
-                    <Description
-                        currentProductData={currentProductData}
-                    />
+                    <Description currentProductData={currentProductData} />
 
                     <hr />
 
@@ -262,12 +252,8 @@ const ProductPage = () => {
                     {/* variant buttons component renders a list of buttons as per the array of variants in the data. Each variant will have a corresponding image */}
 
                     <VariantButtons
-                        currentVariant={
-                            currentSelections?.currentVariant
-                        }
-                        variantButtonClicked={
-                            variantButtonClicked
-                        }
+                        currentVariant={currentSelections?.currentVariant}
+                        variantButtonClicked={variantButtonClicked}
                         currentProductData={currentProductData}
                     />
 
@@ -289,10 +275,7 @@ const ProductPage = () => {
                             currentProductData.quantity > 0 ? (
                                 <>
                                     <strong>In Stock: </strong>
-                                    {
-                                        currentProductData.quantity
-                                    }{' '}
-                                    left
+                                    {currentProductData.quantity} left
                                 </>
                             ) : (
                                 <strong>Out of stock</strong>
@@ -302,6 +285,10 @@ const ProductPage = () => {
                         )}
                     </p>
 
+                    {/* ADD TO CART BUTTON */}
+
+                    <button onClick={handleOnAddCart}>Add to cart</button>
+
                     <hr />
 
                     {/* FAVOURITE BUTTONS */}
@@ -310,18 +297,16 @@ const ProductPage = () => {
 
                     {!isFavourite ? (
                         <button
-                            className={
-                                Styles.ProductPage__favButton
-                            }
-                            onClick={handleOnFavourite}>
+                            className={Styles.ProductPage__favButton}
+                            onClick={handleOnFavourite}
+                        >
                             favourite this product
                         </button>
                     ) : (
                         <button
-                            className={
-                                Styles.ProductPage__favButton
-                            }
-                            onClick={handleRemoveFavourite}>
+                            className={Styles.ProductPage__favButton}
+                            onClick={handleRemoveFavourite}
+                        >
                             unfavourite this product
                         </button>
                     )}
