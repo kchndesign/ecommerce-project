@@ -139,7 +139,10 @@ const CartItem = ({ cartItem, updateCartItem, removeCartItem }) => {
             {/* PRICE */}
             <div
                 className={`${Styles.CartItem__contentWrapper} ${Styles.CartItem__contentWrapperNoShrink}`}>
-                <p>${currentProduct.price?.toFixed(2)}</p>
+                <p>
+                    <strong>Item price: </strong>$
+                    {currentProduct.price?.toFixed(2)}
+                </p>
                 <p>
                     <strong>Total Price: </strong>$
                     {cartItem.totalPrice?.toFixed(2)}
