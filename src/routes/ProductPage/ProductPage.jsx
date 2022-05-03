@@ -312,8 +312,11 @@ const ProductPage = () => {
                             {/* ADD TO CART BUTTON */}
                             <button
                                 className={Styles.ProductPage__favButton}
-                                onClick={handleOnAddCart}>
-                                Add to cart
+                                onClick={handleOnAddCart}
+                                disabled={isAddedToCart}>
+                                {isAddedToCart
+                                    ? 'Added to Cart'
+                                    : 'Add to Cart'}
                             </button>
                             <hr />
                         </>

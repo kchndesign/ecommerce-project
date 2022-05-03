@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import useAllCartItems from '../../hooks/useAllCartItems';
 import Styles from './Cart.module.scss';
 import CartItem from './CartItem/CartItem';
@@ -12,8 +12,21 @@ const Cart = () => {
 
     // =================================
     // SETUP PRICE TOTALLING
-    // there are probably easier ways to do this.
-    // but in the interest of keeping the cart object pure, and not wanting to send data up from the CartItem components, we will have to fetch the prices from the database.
+    // =================================
+
+    const [totalPrice, setTotalPrice] = useState();
+
+    // when the cart items change, we loop through the array and total the total prices.
+    useEffect(() => {
+        const total = cartItems.reduce((acc, item) => {
+            return acc + item.totalPrice;
+        }, 0);
+
+        setTotalPrice(total);
+    }, [cartItems]);
+
+    // =================================
+    // START MARKUP
     // =================================
 
     return (
@@ -33,6 +46,7 @@ const Cart = () => {
                     );
                 })}
             </div>
+            <h3>{totalPrice}</h3>
         </div>
     );
 };
