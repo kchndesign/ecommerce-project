@@ -18,6 +18,10 @@ import useAddToCart from '../../hooks/useAddToCart';
 // the quantity of the order
 // the product id
 // the product category
+// the product price
+// the total cost of the selected variants and quantity
+
+// Unfortunately, the last two are necessary for us to calculate the cart total from the cart page.
 
 // The currentSelections will also serve as the state for the object to be used by elements on the page. e.g. the current variants will be used by the variant buttons and the image.
 
@@ -28,7 +32,17 @@ const reducer = (state, action) => {
         case 'setCurrentVariant':
             return { ...state, currentVariant: action.payload };
         case 'setCurrentQuantity':
-            return { ...state, currentQuantity: action.payload };
+            return {
+                ...state,
+                currentQuantity: action.payload,
+                totalPrice: state.productPrice * action.payload,
+            };
+        case 'setProductPrice':
+            return {
+                ...state,
+                productPrice: action.payload,
+                totalPrice: state.currentQuantity * action.payload,
+            };
         default:
             throw new Error();
     }
@@ -57,6 +71,8 @@ const ProductPage = () => {
     const initialState = {
         currentVariant: '',
         currentQuantity: 1,
+        productPrice: 0,
+        totalPrice: 0,
         productId: urlParams.id,
         category: urlParams.category,
     };
@@ -72,6 +88,7 @@ const ProductPage = () => {
     // then set the state (which will be bound to the input value)
     const handleQuantityPlus = () => {
         if (currentSelections.currentQuantity < currentProductData?.quantity) {
+            console.log(currentSelections.currentQuantity);
             dispatch({
                 type: 'setCurrentQuantity',
                 payload: currentSelections.currentQuantity + 1,
@@ -93,12 +110,12 @@ const ProductPage = () => {
     // then set the state
     const handleQuantityInput = (event) => {
         if (
-            1 < event.target.value &&
+            1 <= event.target.value &&
             event.target.value <= currentProductData?.quantity
         ) {
             dispatch({
                 type: 'setCurrentQuantity',
-                payload: event.target.value,
+                payload: parseInt(event.target.value),
             });
         }
     };
@@ -140,7 +157,7 @@ const ProductPage = () => {
     };
 
     // =================================
-    // SETTING UP ADD TO CART HOOK
+    // ADD TO CART
     // =================================
 
     const [isAddedToCart, addProductToCart] = useAddToCart(urlParams.id);
@@ -158,6 +175,7 @@ const ProductPage = () => {
 
     // await product data
     // dispatch current variant arbitrarily to the first in the array
+    // populate cart object with the product's price
     // then set the current product data
 
     useEffect(() => {
@@ -167,6 +185,11 @@ const ProductPage = () => {
             dispatch({
                 type: 'setCurrentVariant',
                 payload: data.variants[0],
+            });
+
+            dispatch({
+                type: 'setProductPrice',
+                payload: data.price,
             });
 
             setCurrentProductData(data);
@@ -235,7 +258,7 @@ const ProductPage = () => {
 
                     <p className={Styles.ProductPage__price}>
                         {currentProductData?.price ? (
-                            `$${currentProductData.price}`
+                            `$${currentProductData.price?.toFixed(2)}`
                         ) : (
                             <Skeleton />
                         )}
@@ -246,51 +269,59 @@ const ProductPage = () => {
 
                     <Description currentProductData={currentProductData} />
 
-                    <hr />
-
-                    {/* VARIANT BUTTONS */}
-                    {/* variant buttons component renders a list of buttons as per the array of variants in the data. Each variant will have a corresponding image */}
-
-                    <VariantButtons
-                        currentVariant={currentSelections?.currentVariant}
-                        variantButtonClicked={variantButtonClicked}
-                        currentProductData={currentProductData}
-                    />
-
-                    {/* QUANTITY INPUT */}
-                    {/* input the quantity for the add to cart functionality */}
-
-                    <QuantityInput
-                        value={currentSelections.currentQuantity}
-                        handleIncrement={handleQuantityPlus}
-                        handleDecrement={handleQuantityMinus}
-                        onInput={handleQuantityInput}
-                    />
-
-                    {/* QUANTITY TEXT */}
-                    {/* some logic here to differentiate between out of stock and in stock */}
-
-                    <p className={Styles.ProductPage__quantity}>
-                        {currentProductData?.quantity != null ? (
-                            currentProductData.quantity > 0 ? (
-                                <>
-                                    <strong>In Stock: </strong>
-                                    {currentProductData.quantity} left
-                                </>
-                            ) : (
-                                <strong>Out of stock</strong>
-                            )
-                        ) : (
-                            <Skeleton />
-                        )}
-                    </p>
-
-                    {/* ADD TO CART BUTTON */}
-
-                    <button onClick={handleOnAddCart}>Add to cart</button>
-
-                    <hr />
-
+                    {/* ITEM OUT OF STOCK? */}
+                    {/* render none of this except an out of stock message */}
+                    {currentProductData.quantity > 0 ? (
+                        <>
+                            {' '}
+                            <hr />
+                            {/* VARIANT BUTTONS */}
+                            {/* variant buttons component renders a list of buttons as per the array of variants in the data. Each variant will have a corresponding image */}
+                            <VariantButtons
+                                currentVariant={
+                                    currentSelections?.currentVariant
+                                }
+                                variantButtonClicked={variantButtonClicked}
+                                currentProductData={currentProductData}
+                            />
+                            {/* QUANTITY INPUT */}
+                            {/* input the quantity for the add to cart functionality */}
+                            <QuantityInput
+                                value={currentSelections.currentQuantity}
+                                handleIncrement={handleQuantityPlus}
+                                handleDecrement={handleQuantityMinus}
+                                onInput={handleQuantityInput}
+                            />
+                            {/* QUANTITY TEXT */}
+                            {/* some logic is required because we want to replace the whole text with a skeleton loader but we have some static 'in stock' text at the same time */}
+                            <p className={Styles.ProductPage__quantity}>
+                                {currentProductData ? (
+                                    <>
+                                        <strong>In stock: </strong>{' '}
+                                        {currentProductData?.quantity} left
+                                    </>
+                                ) : (
+                                    <Skeleton />
+                                )}
+                            </p>
+                            {/* TOTAL PRICE TEXT */}
+                            <p>
+                                <strong>Total Price</strong>: $
+                                {currentSelections.totalPrice?.toFixed(2)}
+                            </p>
+                            {/* ADD TO CART BUTTON */}
+                            <button
+                                className={Styles.ProductPage__favButton}
+                                onClick={handleOnAddCart}>
+                                Add to cart
+                            </button>
+                            <hr />
+                        </>
+                    ) : (
+                        <p className={Styles.ProductPage__quantity}>
+                            <strong>Out of stock</strong>
+                        </p>
+                    )}
                     {/* FAVOURITE BUTTONS */}
                     {/* swap out buttons if the product is favourited or not */}
                     {/* each button references its corresponding click handler function */}
@@ -298,15 +329,13 @@ const ProductPage = () => {
                     {!isFavourite ? (
                         <button
                             className={Styles.ProductPage__favButton}
-                            onClick={handleOnFavourite}
-                        >
+                            onClick={handleOnFavourite}>
                             favourite this product
                         </button>
                     ) : (
                         <button
                             className={Styles.ProductPage__favButton}
-                            onClick={handleRemoveFavourite}
-                        >
+                            onClick={handleRemoveFavourite}>
                             unfavourite this product
                         </button>
                     )}

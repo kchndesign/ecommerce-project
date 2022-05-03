@@ -1,12 +1,44 @@
+// wrapping div styling
+// contains an image and a div with the rest of the content
+// mobile first: stacked layout with image on top.
+// desktop: side by side
 .CartItem {
-    &__flex {
-        // MOBILE FIRST STYLING
-        // vertical
-        display: grid;
-        grid-template-areas: 'a' 'b', 'a' 'c';
-        row-gap: 2rem;
+    box-sizing: border-box;
 
-        @media screen and (min-width: 650px) {
+    border-top: 1px solid #aaa;
+    border-bottom: 1px solid #aaa;
+
+    padding: 2rem 1rem;
+
+    display: flex;
+    flex-direction: column;
+
+    // thumbnail styling
+    // big on mobile because its all stacked
+    // small on desktop because its going to be a sideways thing
+    // the link is selected here because the thumbnail is nested inside it
+    & > a {
+        .CartItem__thumb {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: contain;
+            filter: brightness(0.93);
+        }
+    }
+
+    &__contentWrapper {
+        display: flex;
+        flex-direction: column;
+
+        padding: 0.5rem;
+
+        & > p {
+            margin: 0.5rem 0;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
         }
     }
 
@@ -14,13 +46,77 @@
         background-color: #f1f1f1;
     }
 
-    hr {
-        &:first-of-type {
-            margin-bottom: 1rem;
+    // =================================
+    // MEDIUM STYLING
+    // =================================
+
+    @media screen and (min-width: 500px) {
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+        column-gap: 1rem;
+
+        // max-width to balance layout when in medium
+        max-width: 35rem;
+        margin: auto;
+
+        // dont allow thumbnail to resize
+        // it along witht the title will take up the whole first row
+        & > a {
+            flex-basis: 14rem;
+            flex-grow: 1;
+            flex-shrink: 0;
         }
 
-        &:last-of-type {
-            margin-top: 1rem;
+        // use calc to make title take up the rest of the space.
+        // 100% - thumbnail width - padding
+        &__contentWrapperTitle {
+            flex-basis: calc(100% - 14rem - 2rem);
+        }
+
+        // force stacked layout for the price and quantity
+        &__contentWrapperNoShrink {
+            flex-basis: 100%;
+            flex-shrink: 0;
+        }
+    }
+
+    // =================================
+    // DESKTOP STYLING
+    // NOTE: these styles inherit styles from smaller screen widths for DRYness
+    // =================================
+    @media screen and (min-width: 768px) {
+        // thumbnail styling for desktops
+
+        justify-content: space-between;
+        flex-wrap: nowrap;
+
+        // unset max width
+        max-width: unset;
+
+        // resize thumbnail with everything else
+        & > a {
+            flex-basis: 10rem;
+            flex-shrink: 1;
+            flex-grow: 0;
+
+            .CartItem__thumb {
+                height: 10rem;
+            }
+        }
+
+        // center aligned since all elements are in line
+        &__contentWrapper {
+            justify-content: center;
+        }
+
+        &__contentWrapperTitle {
+            flex-basis: 17rem;
+        }
+
+        &__contentWrapperNoShrink {
+            flex-basis: max-content;
+            flex-shrink: 0;
         }
     }
 }
