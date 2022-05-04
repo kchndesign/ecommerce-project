@@ -106,6 +106,7 @@
         }
 
         // center aligned since all elements are in line
+        // add separators between the horizontally laidout elements
         &__contentWrapper {
             justify-content: center;
         }

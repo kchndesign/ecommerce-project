@@ -78,9 +78,10 @@ const CartItem = ({ cartItem, updateCartItem, removeCartItem }) => {
             let newCartObject = {
                 ...cartItem,
                 currentQuantity: parseInt(e.target.value),
+                totalPrice: cartItem.productPrice * parseInt(e.target.value),
             };
             updateCartItem(newCartObject);
-        } else if (e.target.value == 0) {
+        } else if (e.target.value === 0) {
             removeCartItem(cartItem.productId);
         }
     };
