@@ -7,8 +7,8 @@ import Styles from './NavBar.module.scss';
 
 const NavBar = () => {
     return (
-        <nav className={Styles.NavBar}>
-            <div className={Styles.NavBar__container}>
+        <div className={Styles.NavBar}>
+            <nav className={`${Styles.NavBar} ${Styles.NavBar__container}`}>
                 <Link to="/">
                     <img
                         src={Logo}
@@ -26,8 +26,8 @@ const NavBar = () => {
                         className={Styles.NavBar__icon}
                     />
                 </Link>
-            </div>
-        </nav>
+            </nav>
+        </div>
     );
 };
 

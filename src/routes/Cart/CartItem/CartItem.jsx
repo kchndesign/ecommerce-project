@@ -34,7 +34,7 @@ const CartItem = ({ cartItem, updateCartItem, removeCartItem }) => {
         }
 
         getData();
-    }, []);
+    }, [cartItem.category, cartItem.productId]);
 
     // =================================
     // QUANTITY EVENT HANDLERS
@@ -113,7 +113,8 @@ const CartItem = ({ cartItem, updateCartItem, removeCartItem }) => {
             {/* TITLE AND VARIANT */}
             {/* bundled together because of flex box styling */}
             <div
-                className={`${Styles.CartItem__contentWrapper} ${Styles.CartItem__contentWrapperTitle}`}>
+                className={`${Styles.CartItem__contentWrapper} ${Styles.CartItem__contentWrapperTitle}`}
+            >
                 <Link to={`/${cartItem.category}/${cartItem.productId}`}>
                     <h3>
                         {currentProduct.title || (
@@ -127,7 +128,8 @@ const CartItem = ({ cartItem, updateCartItem, removeCartItem }) => {
 
             {/* QUANTITY SELECTOR AND INSTOCK QUANTITY */}
             <div
-                className={`${Styles.CartItem__contentWrapper} ${Styles.CartItem__contentWrapperNoShrink}`}>
+                className={`${Styles.CartItem__contentWrapper} ${Styles.CartItem__contentWrapperNoShrink}`}
+            >
                 <QuantityInput
                     value={cartItem.currentQuantity}
                     handleIncrement={handleIncrement}
@@ -139,7 +141,8 @@ const CartItem = ({ cartItem, updateCartItem, removeCartItem }) => {
 
             {/* PRICE */}
             <div
-                className={`${Styles.CartItem__contentWrapper} ${Styles.CartItem__contentWrapperNoShrink}`}>
+                className={`${Styles.CartItem__contentWrapper} ${Styles.CartItem__contentWrapperNoShrink}`}
+            >
                 <p>
                     <strong>Item price: </strong>$
                     {currentProduct.price?.toFixed(2)}

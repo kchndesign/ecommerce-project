@@ -8,9 +8,7 @@ import { useParams } from 'react-router-dom';
 
 const ProductsPage = () => {
     // initialise with empty products to show skeleton placeholders
-    const [products, setProducts] = useState(
-        Array(6).fill(null)
-    );
+    const [products, setProducts] = useState(Array(6).fill(null));
 
     // get the category of products to display
     const { category } = useParams();
@@ -28,10 +26,9 @@ const ProductsPage = () => {
     }, [category]);
 
     return (
-        <div className={Styles.ProductsPage}>
+        <>
             <h2 className={Styles.ProductsPage__heading}>
-                {category.charAt(0).toUpperCase() +
-                    category.slice(1)}
+                {category.charAt(0).toUpperCase() + category.slice(1)}
             </h2>
             <Carousel
                 featuredProducts={products.filter((product) => {
@@ -48,7 +45,7 @@ const ProductsPage = () => {
                     );
                 })}
             </CardContainer>
-        </div>
+        </>
     );
 };
 

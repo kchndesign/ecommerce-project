@@ -195,14 +195,14 @@ const ProductPage = () => {
             setCurrentProductData(data);
         }
         initCurrentProductData();
-    }, []);
+    }, [urlParams]);
 
     // =================================
     // START MARKUP
     // =================================
 
     return (
-        <div className={Styles.ProductPage}>
+        <>
             {/* BREADCRUMBS */}
             {/* breadcrumbs film > film_product for example */}
 
@@ -313,7 +313,8 @@ const ProductPage = () => {
                             <button
                                 className={Styles.ProductPage__favButton}
                                 onClick={handleOnAddCart}
-                                disabled={isAddedToCart}>
+                                disabled={isAddedToCart}
+                            >
                                 {isAddedToCart
                                     ? 'Added to Cart'
                                     : 'Add to Cart'}
@@ -332,19 +333,21 @@ const ProductPage = () => {
                     {!isFavourite ? (
                         <button
                             className={Styles.ProductPage__favButton}
-                            onClick={handleOnFavourite}>
+                            onClick={handleOnFavourite}
+                        >
                             favourite this product
                         </button>
                     ) : (
                         <button
                             className={Styles.ProductPage__favButton}
-                            onClick={handleRemoveFavourite}>
+                            onClick={handleRemoveFavourite}
+                        >
                             unfavourite this product
                         </button>
                     )}
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 

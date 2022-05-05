@@ -107,7 +107,7 @@ export const seedProducts = async (collection, products) => {
 export const getProductsById = async (array) => {
     if (
         !Array.isArray(array) ||
-        array.length == 0 ||
+        array.length === 0 ||
         array.some((item) => typeof item !== 'string')
     ) {
         return [];

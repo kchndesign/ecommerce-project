@@ -47,7 +47,7 @@ const Cart = () => {
             );
         });
 
-        const replyArr = await Promise.all(promiseArr);
+        await Promise.all(promiseArr);
         clearCartItems();
     };
 
@@ -56,12 +56,12 @@ const Cart = () => {
     // =================================
 
     return (
-        <div className={Styles.Cart}>
+        <>
             {/* Title */}
-            <h1>Your Shopping Cart</h1>
+            <h1 className={Styles.Cart__h1}>Your Shopping Cart</h1>
 
             {/* List of cart items */}
-            <div className={Styles.Cart__itemsContainer}>
+            <div>
                 {cartItems.map((product) => {
                     return (
                         <CartItem
@@ -73,6 +73,7 @@ const Cart = () => {
                         />
                     );
                 })}
+                {cartItems.length === 0 ? 'Nothing here.' : null}
             </div>
 
             {/* Cart summary with total price etc */}
@@ -132,7 +133,7 @@ const Cart = () => {
                 </button>
                 <p>Note: this will mutate the database.</p>
             </div>
-        </div>
+        </>
     );
 };
 

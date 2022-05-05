@@ -5,19 +5,16 @@ import Arrow from '../../img/arrow.svg';
 const QuantityInput = (props) => {
     return (
         <div className={Styles.QuantityInput}>
-            <p>
+            <label htmlFor="number">
                 <strong>Quantity</strong>
-            </p>
-            <div
-                className={Styles.QuantityInput__inputContainer}>
+            </label>
+            <div className={Styles.QuantityInput__inputContainer}>
                 <button onClick={props.handleDecrement}>
-                    <img
-                        src={Arrow}
-                        alt="cart quantity minus one"
-                    />
+                    <img src={Arrow} alt="cart quantity minus one" />
                 </button>
                 <input
                     type="number"
+                    id="number"
                     inputMode="numeric"
                     pattern="[0-9]*"
                     value={props.value}
@@ -25,10 +22,7 @@ const QuantityInput = (props) => {
                     invalid={props.invalid}
                 />
                 <button onClick={props.handleIncrement}>
-                    <img
-                        src={Arrow}
-                        alt="cart quantity plus one"
-                    />
+                    <img src={Arrow} alt="cart quantity plus one" />
                 </button>
             </div>
         </div>
