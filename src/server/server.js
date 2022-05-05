@@ -74,7 +74,7 @@ export const checkoutProduct = async (collection, productId, quantity) => {
             ...product,
             quantity: newQuantity,
         };
-        console.log(product, newProduct);
+
         return await updateProduct(collection, newProduct);
     } catch (error) {
         console.error(error);

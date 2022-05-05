@@ -88,7 +88,6 @@ const ProductPage = () => {
     // then set the state (which will be bound to the input value)
     const handleQuantityPlus = () => {
         if (currentSelections.currentQuantity < currentProductData?.quantity) {
-            console.log(currentSelections.currentQuantity);
             dispatch({
                 type: 'setCurrentQuantity',
                 payload: currentSelections.currentQuantity + 1,
