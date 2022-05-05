@@ -70,7 +70,14 @@ const useAllCartItems = () => {
         setCartItems(getAllItems());
     };
 
-    return [cartItems, updateCartItem, removeCartItem];
+    // set the localStorage entry to an empty array
+    // update state with localStorage
+    const clearCartItems = () => {
+        localStorage.setItem('cart', JSON.stringify([]));
+        setCartItems(getAllItems());
+    };
+
+    return [cartItems, updateCartItem, removeCartItem, clearCartItems];
 };
 
 export default useAllCartItems;

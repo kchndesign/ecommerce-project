@@ -2,13 +2,15 @@ import React, { useEffect, useState } from 'react';
 import useAllCartItems from '../../hooks/useAllCartItems';
 import Styles from './Cart.module.scss';
 import CartItem from './CartItem/CartItem';
+import { checkoutProduct } from '../../server/server';
 
 const Cart = () => {
     // ============================
     // SETUP USE ALL CART ITEMS HOOK
     // ============================
 
-    const [cartItems, updateCartItem, removeCartItem] = useAllCartItems();
+    const [cartItems, updateCartItem, removeCartItem, clearCartItems] =
+        useAllCartItems();
 
     // =================================
     // SETUP PRICE TOTALLING
@@ -24,6 +26,30 @@ const Cart = () => {
 
         setTotalPrice(total);
     }, [cartItems]);
+
+    // =================================
+    // HANDLE CHECKOUT CART
+    // this function needs to mutate the database and subtract the quantity of items the user has chosen
+    // map through the cartItems state array and for each product, call checkoutProduct() and return an array of promises.
+    // at the end clear cart.
+    // =================================
+
+    const handleCheckoutCart = async () => {
+        if (cartItems.length === 0) {
+            return;
+        }
+
+        const promiseArr = cartItems.map((item) => {
+            return checkoutProduct(
+                item.category,
+                item.productId,
+                item.currentQuantity
+            );
+        });
+
+        const replyArr = await Promise.all(promiseArr);
+        clearCartItems();
+    };
 
     // =================================
     // START MARKUP
@@ -54,51 +80,54 @@ const Cart = () => {
                 {/* Title */}
                 <h3 className={Styles.Cart__summary__title}>Cart Summary</h3>
                 <table>
-                    {/* subtotal */}
-                    <tr>
-                        <td>
-                            <p>Subtotal:</p>
-                        </td>
-                        <td>
-                            <p>
-                                {totalPrice === 0
-                                    ? null
-                                    : '$' + totalPrice?.toFixed(2)}
-                            </p>
-                        </td>
-                    </tr>
-
-                    {/* GST */}
-                    <tr>
-                        <td>
-                            <p>GST:</p>
-                        </td>
-                        <td>
-                            <p>
-                                {totalPrice === 0
-                                    ? null
-                                    : '$' + (totalPrice * 0.1).toFixed(2)}
-                            </p>
-                        </td>
-                    </tr>
-
-                    {/* total total price */}
-                    <tr>
-                        <td></td>
-                        <td className={Styles.Cart__summary__total}>
-                            <p>
-                                <strong>
+                    <tbody>
+                        {/* subtotal */}
+                        <tr>
+                            <td>
+                                <p>Subtotal:</p>
+                            </td>
+                            <td>
+                                <p>
                                     {totalPrice === 0
                                         ? null
                                         : '$' + totalPrice?.toFixed(2)}
-                                </strong>
-                            </p>
-                        </td>
-                    </tr>
+                                </p>
+                            </td>
+                        </tr>
+                        {/* GST */}
+                        <tr>
+                            <td>
+                                <p>GST:</p>
+                            </td>
+                            <td>
+                                <p>
+                                    {totalPrice === 0
+                                        ? null
+                                        : '$' + (totalPrice * 0.1).toFixed(2)}
+                                </p>
+                            </td>
+                        </tr>
+                        {/* total total price */}
+                        <tr>
+                            <td></td>
+                            <td className={Styles.Cart__summary__total}>
+                                <p>
+                                    <strong>
+                                        {totalPrice === 0
+                                            ? null
+                                            : '$' + totalPrice?.toFixed(2)}
+                                    </strong>
+                                </p>
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
 
                 {/* Checkout button */}
-                <button className={Styles.Cart__summary__checkout}>
+                <button
+                    className={Styles.Cart__summary__checkout}
+                    onClick={handleCheckoutCart}
+                >
                     Checkout
                 </button>
                 <p>Note: this will mutate the database.</p>
