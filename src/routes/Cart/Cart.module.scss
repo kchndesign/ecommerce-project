@@ -3,4 +3,49 @@
         margin-top: 1rem;
         margin-bottom: 2rem;
     }
+
+    // summary is a max width-d container that floats right
+    // it has a two column layout with the left column being justified left and the right column being justified right
+    &__summary {
+        max-width: 30rem;
+        margin-left: auto;
+
+        &__title {
+            margin: 1rem 0;
+        }
+
+        table {
+            width: 100%;
+
+            td {
+                padding: 1rem 0;
+                border-top: 1px solid #bbb;
+            }
+
+            // label field
+            td:nth-child(1) {
+                font-weight: bold;
+            }
+
+            // value
+            td:nth-child(2) {
+                text-align: right;
+            }
+
+            // total price
+            .Cart__summary__total {
+                font-size: 1.5rem;
+                font-weight: bold;
+            }
+        }
+
+        // checkout button
+        &__checkout {
+            border: none;
+            border: 1px solid #bbb;
+            background-color: white;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+    }
 }

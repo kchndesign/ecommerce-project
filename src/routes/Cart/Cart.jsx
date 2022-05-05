@@ -31,8 +31,10 @@ const Cart = () => {
 
     return (
         <div className={Styles.Cart}>
+            {/* Title */}
             <h1>Your Shopping Cart</h1>
 
+            {/* List of cart items */}
             <div className={Styles.Cart__itemsContainer}>
                 {cartItems.map((product) => {
                     return (
@@ -46,7 +48,61 @@ const Cart = () => {
                     );
                 })}
             </div>
-            <h3>{totalPrice}</h3>
+
+            {/* Cart summary with total price etc */}
+            <div className={Styles.Cart__summary}>
+                {/* Title */}
+                <h3 className={Styles.Cart__summary__title}>Cart Summary</h3>
+                <table>
+                    {/* subtotal */}
+                    <tr>
+                        <td>
+                            <p>Subtotal:</p>
+                        </td>
+                        <td>
+                            <p>
+                                {totalPrice === 0
+                                    ? null
+                                    : '$' + totalPrice?.toFixed(2)}
+                            </p>
+                        </td>
+                    </tr>
+
+                    {/* GST */}
+                    <tr>
+                        <td>
+                            <p>GST:</p>
+                        </td>
+                        <td>
+                            <p>
+                                {totalPrice === 0
+                                    ? null
+                                    : '$' + (totalPrice * 0.1).toFixed(2)}
+                            </p>
+                        </td>
+                    </tr>
+
+                    {/* total total price */}
+                    <tr>
+                        <td></td>
+                        <td className={Styles.Cart__summary__total}>
+                            <p>
+                                <strong>
+                                    {totalPrice === 0
+                                        ? null
+                                        : '$' + totalPrice?.toFixed(2)}
+                                </strong>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+
+                {/* Checkout button */}
+                <button className={Styles.Cart__summary__checkout}>
+                    Checkout
+                </button>
+                <p>Note: this will mutate the database.</p>
+            </div>
         </div>
     );
 };
