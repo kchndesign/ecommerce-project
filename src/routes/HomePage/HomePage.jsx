@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import CardContainer from "../../components/CardContainer";
-import ProductCard from "../../components/ProductCard";
-import { getProductsById } from "../../server/server";
-import Styles from "./HomePage.module.scss";
-import FilmImage from "../../img/film-image.jpg";
-import CameraImage from "../../img/film-camera-image.jpg";
-import useAllFavouritedItems from "../../hooks/useAllFavouriteItems";
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import CardContainer from '../../components/CardContainer';
+import ProductCard from '../../components/ProductCard';
+import { getProductsById } from '../../server/server';
+import Styles from './HomePage.module.scss';
+import FilmImage from '../../img/film-image.jpg';
+import CameraImage from '../../img/film-camera-image.jpg';
+import useAllFavouritedItems from '../../hooks/useAllFavouriteItems';
 
 const HomePage = () => {
     // *********************
@@ -15,13 +15,10 @@ const HomePage = () => {
     // *********************
 
     // fill array with null while we load the data
-    const [favProducts, setFavProducts] = useState(
-        new Array(3).fill(null)
-    );
+    const [favProducts, setFavProducts] = useState(new Array(3).fill(null));
 
     // use hook to get and manipulate list of product IDs from localstorage.
-    const { listOfFavourites, clearFavourites } =
-        useAllFavouritedItems();
+    const { listOfFavourites, clearFavourites } = useAllFavouritedItems();
 
     // on component mount and when listOfFavourites changes, update product IDs array, and load the product data from firestore using the array of product IDs
     useEffect(() => {
@@ -39,9 +36,7 @@ const HomePage = () => {
     return (
         <>
             {/* TITLE */}
-            <h1 className={Styles.HomePage__Heading}>
-                Kevin's Film Store
-            </h1>
+            <h1 className={Styles.HomePage__Heading}>kchn Film Store</h1>
 
             {/* NAVIGATION LINKS  */}
             {/* links to both categories */}
@@ -50,17 +45,11 @@ const HomePage = () => {
                 aria-label="Navigation Links"
                 className={Styles.HomePage__flexContainer}
             >
-                <Link
-                    className={Styles.HomePage__Link}
-                    to="film"
-                >
+                <Link className={Styles.HomePage__Link} to="film">
                     <img src={FilmImage} alt="Roll of film" />
                     <h2>Shop Film</h2>
                 </Link>
-                <Link
-                    className={Styles.HomePage__Link}
-                    to="cameras"
-                >
+                <Link className={Styles.HomePage__Link} to="cameras">
                     <img src={CameraImage} alt="Film camera" />
                     <h2>Shop Film Cameras</h2>
                 </Link>

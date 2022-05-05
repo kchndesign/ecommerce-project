@@ -15,6 +15,9 @@
     &__icon {
         width: 4rem;
         margin: 1rem 0;
-        filter: invert(1);
+
+        &Inverted {
+            filter: invert(1);
+        }
     }
 }
