@@ -13,8 +13,8 @@ comes from beginningfilm.com and ikigaifilmlab.com.au/store_
 
 This is a mock e-commerce website that uses create-react-app and firestore. The
 products are stored as firestore documents and user interactions requiring
-persistence like a favourites product list or adding products to their cart use
-localStorage.
+persistence like a favourites product list or adding products to their cart
+using localStorage.
 
 ## Contents
 

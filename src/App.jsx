@@ -16,7 +16,7 @@ import Cart from './routes/Cart/Cart';
 
 function App() {
     return (
-        <Router>
+        <Router basename="/ecommerce-project">
             <NavBar />
             <main className={Styles.App}>
                 <Routes>
